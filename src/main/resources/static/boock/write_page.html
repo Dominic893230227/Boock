@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;margin: 0">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/boock/css/write_page.css" rel="stylesheet">
+    <script src="/js/bootstrap.bundle.js"></script>
+    <script src="/js/jquery-3.5.1.js"></script>
+    <script src="/ckeditor/ckeditor.js"></script>
+    <script src="/js/particles.js"></script>
+    <link href="/css/particles-js.css" rel="stylesheet">
+</head>
+<body class="containBody">
+<div id="particles-js"></div>
+<div class="main-panel">
+    <div class="menu-panel">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" id="top-menu">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/index.html">Boock</a>
+                <!--                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
+                <!--                    <span class="navbar-toggler-icon"></span>-->
+                <!--                </button>-->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+
+                    <ul class="navbar-nav me-0">
+                        <li class="nav-item">
+                            <img src="" class="head-photo">
+                            <input type="hidden" id="id">
+                            <input type="hidden" id="username">
+                        </li>
+                        <!--                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+                        <li class="nav-item dropdown">
+                            <a id="userDropDown" class="nav-link dropdown-toggle" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                我的
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/person_center/index.html" onclick="">个人中心</a>
+                                </li>
+                                <li><a class="dropdown-item" href="/boock/write_page.html" onclick="">创作</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" onclick="logOut()">退出账号</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="main-context">
+        <div class="write-panel">
+            <textarea name="content" id="content"></textarea>
+            <div class="operate-panel">
+                <input type="button" class="btn btn-primary" value="发布" onclick="submit()" style="margin-left: auto;margin-right: 20px;width: 100px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div  style="float:left;width:50%;height: 100%;position: fixed;background: url('images/篝火1.png');background-size: cover;background-repeat: no-repeat;background-position: center;">-->
+<!--</div>-->
+<!--<button type="button"  class="btn btn-primary">牛</button>-->
+</body>
+<script>
+    $(function () {
+        particlesJS.load('particles-js', '/js/particles.json', function() {
+            console.log('callback - particles.js config loaded');
+        });
+        CKEDITOR.replace('content', {height: "375px", width: "100%"});
+        loadUser();
+        // let fuck = "<p>我擦</p>\n\n<p><img src=\"data:image/png;base64,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\" /></p>"
+        // let editor = CKEDITOR.instances.content;
+        // editor.setData(fuck);
+    })
+
+    function submit(){
+        let editor = CKEDITOR.instances.content;
+        let data = editor.getData();
+        let param = {
+            id : $("#id").val(),
+            userId : $("#id").val(),
+            content: data,
+            createBy : $("#id").val()
+        }
+        $.ajax({
+            url: '/boock/submit', // 后端上传接口
+            type: 'POST',
+            data: JSON.stringify(param),
+            contentType: 'application/json',
+            success: function(response) {
+                // console.log('Success:', response); // 处理成功响应
+                alert("发布成功");
+                let editor = CKEDITOR.instances.content;
+                editor.setData('');
+                window.location.href = "/index.html";
+            },
+            error: function(error) {
+                console.error('Error:', error); // 处理错误响应
+                alert("发布失败")
+            }
+        });
+    }
+
+    function loadUser() {
+        $.ajax({
+            type: 'Get',
+            url: '/user/loadUser',
+            dataType: 'json',
+            success: function (data) {
+                $("#userDropDown").text(data.name)
+                $(".head-photo").attr("src", "/headPhoto/"+data.UserPhoto.fileName)
+                $("#id").val(data.id)
+                $("#username").val(data.username)
+            },
+            error: function (xhr, error) {
+                if (xhr.status = '403') {
+                    window.location.href = "/";
+                }
+                console.log("我真是服了")
+                console.log(error)
+            }
+        })
+    }
+
+    function logOut() {
+        $.ajax({
+            type: 'Get',
+            url: '/',
+            dataType: 'json',
+            success: function (data) {
+                if (data.status === 'success') {
+                    window.location.href = "loginPage.html";
+                } else {
+                    alert("Logout failed");
+                }
+            },
+            error: function (error) {
+                console.error("Logout error:", error);
+                alert("Logout failed. Please try again later.");
+            }
+        })
+    }
+</script>
+</html>

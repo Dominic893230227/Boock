@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boock.dao.UserMapper">
+
+    <insert id="insertPhoto">
+        insert into bk_user_photo (uuid, user_id, path, file_name) VALUES (uuid(),#{user_id},#{path},#{file_name})
+    </insert>
+    <update id="saveInfo">
+        update bk_user set username = #{username},name = #{name},phone = #{phone} where id = #{id}
+    </update>
+    <update id="updatePhoto">
+        update bk_user_photo set path = #{path},file_name=#{file_name} where user_id = ${user_id}
+    </update>
+    <select id="getUserById" resultType="com.boock.entity.po.User">
+        select * from bk_user where id = #{id}
+    </select>
+    <select id="findPhoto" resultType="com.boock.entity.po.UserPhoto">
+        select * from bk_user_photo where user_id = #{id}
+    </select>
+    <select id="search" resultType="com.boock.entity.po.User">
+        select * from bk_user where name like concat('%',#{param},'%')
+    </select>
+</mapper>

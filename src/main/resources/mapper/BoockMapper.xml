@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boock.dao.BoockMapper">
+
+    <insert id="add" parameterType="com.boock.entity.po.Boock">
+        insert into bk_content (id, user_id, name, content, create_by, create_time)
+        VALUES (#{boock.id},#{boock.userId},#{boock.name},#{boock.content},#{boock.createBy},#{boock.createTime})
+    </insert>
+    <insert id="addComment" parameterType="com.boock.entity.po.Comment">
+        insert into bk_comment (id, content_id, user_id, name, comment, create_by, create_time, reply_to_id, reply_to_user_id, reply_to_name)
+        VALUES (#{comment.id},#{comment.contentId},#{comment.userId},#{comment.name},#{comment.comment},#{comment.createBy},#{comment.createTime},#{comment.replyToId},#{comment.replyToUserId},#{comment.replyToName})
+    </insert>
+    <select id="getAllBoock" resultType="com.boock.entity.po.Boock">
+        select id,user_id,name,content,create_by,create_time from bk_content order by create_time desc
+    </select>
+    <select id="getBoockById" resultType="com.boock.entity.po.Boock">
+        select id,user_id,name,content,create_by,create_time from bk_content where user_id = #{id} order by create_time desc
+    </select>
+    <select id="getCommentByContentId" resultType="com.boock.entity.po.Comment">
+        select * from bk_comment where content_id = #{contentId} order by create_time
+    </select>
+    <select id="search" resultType="com.boock.entity.po.Boock">
+        SELECT * FROM `bk_content` c1 
+        WHERE content LIKE concat('%',#{param},'%') or name like concat('%',#{param},'%') order by create_time desc
+    </select>
+</mapper>

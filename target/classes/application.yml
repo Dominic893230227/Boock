@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/boock?characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: 123456
+    driver: com.mysql.cj.jdbc.Driver
+mybatis:
+  # mapper.xml文件位置
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.boock.entity
+  configuration:
+    map-underscore-to-camel-case: true
+file:
+  path:
+    windows: D:/SOFTWARE/CODE/uploadFile/headPhoto/
+    linux: /opt/uploadFile/headPhoto/
+  boockPath:
+    windows: D:/SOFTWARE/CODE/uploadFile/boock/
+    linux: /opt/uploadFile/boock/
+
