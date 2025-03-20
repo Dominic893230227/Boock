@@ -96,6 +96,7 @@
                 alert("发布成功");
                 let editor = CKEDITOR.instances.content;
                 editor.setData('');
+                localStorage.setItem('expAttention', '+50Exp');
                 window.location.href = "/index.html";
             },
             error: function(error) {

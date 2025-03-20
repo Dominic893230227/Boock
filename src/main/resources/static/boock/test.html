@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>收缩展开示例</title>
+    <style>
+        .content {
+            width: 300px;
+            border: 1px solid #ccc;
+            overflow: hidden;
+            max-height: 100px; /* 初始高度限制 */
+            transition: max-height 0.3s ease-in-out; /* 添加过渡效果 */
+        }
+        .content.expanded {
+            max-height: 500px; /* 展开后的最大高度，根据实际内容调整 */
+        }
+        .toggle-btn {
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="content" id="myContent">
+    <p>这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。</p>
+    <p>这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。</p>
+    <p>这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。这里是需要收缩展开的内容。</p>
+</div>
+<button class="toggle-btn" id="toggleBtn">展开</button>
+
+<script>
+    const content = document.getElementById('myContent');
+    const toggleBtn = document.getElementById('toggleBtn');
+
+    toggleBtn.addEventListener('click', () => {
+        content.classList.toggle('expanded');
+        if (content.classList.contains('expanded')) {
+            toggleBtn.textContent = '收起';
+        } else {
+            toggleBtn.textContent = '展开';
+        }
+    });
+</script>
+</body>
+</html>

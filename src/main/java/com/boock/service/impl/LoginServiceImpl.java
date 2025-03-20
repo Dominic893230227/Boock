@@ -44,13 +44,26 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public boolean registe(User user) {
-        user.setPassword(EncryptionUtil.encrypt(user.getPassword()));
-        int i = loginMapper.addUser(user);
-        if(i>=1){
-            return true;
+    public HashMap<String,Object> registe(User user) {
+        boolean flag = false ;
+        HashMap<String, Object> map = new HashMap<>();
+        if(loginMapper.getUser(user.getUsername())!=null){
+            map.put("flag",flag);
+            map.put("msg","用户名已存在");
+            return map;
         }else{
-            return false;
+            user.setPassword(EncryptionUtil.encrypt(user.getPassword()));
+            int i = loginMapper.addUser(user);
+            if(i>=1){
+                flag = true;
+                map.put("flag",flag);
+                map.put("msg","创建成功");
+                return map;
+            }else{
+                map.put("flag",flag);
+                map.put("msg","创建失败");
+                return map;
+            }
         }
     }
 }

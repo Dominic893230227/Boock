@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>弹窗示例</title>
+  <style>
+    /* 弹窗的基本样式 */
+    .popup {
+      position: fixed; /* 固定定位，使弹窗相对于视口位置固定 */
+      top: 50%; /* 垂直居中 */
+      left: 50%; /* 水平居中 */
+      transform: translate(-50%, -50%); /* 通过偏移调整，使弹窗中心对齐屏幕中心 */
+      background-color: rgba(0, 0, 0, 0.8); /* 黑色半透明背景 */
+      color: white; /* 文字颜色为白色 */
+      padding: 10px 20px; /* 内边距，上下10px，左右20px */
+      border-radius: 5px; /* 圆角边框 */
+      font-size: 20px; /* 字体大小 */
+      font-family: Arial, sans-serif; /* 字体类型 */
+      opacity: 0; /* 默认透明，隐藏弹窗 */
+      pointer-events: none; /* 防止弹窗干扰其他元素（如点击穿透） */
+      z-index: 1000; /* 设置层级，确保弹窗在最上层 */
+    }
+
+    /* 当弹窗显示时添加的类，用于触发动画 */
+    .show-popup {
+      animation: fadeOut 2s ease-in-out forwards; /* 应用名为fadeOut的动画，持续2秒，缓动效果，动画结束后保持最终状态 */
+    }
+
+    /* 定义fadeOut动画的关键帧 */
+    @keyframes fadeOut {
+      0% {
+        opacity: 0; /* 动画开始时完全透明 */
+        transform: translate(-50%, -50%) translateY(20px); /* 从下方20px处进入，保持居中 */
+      }
+      20% {
+        opacity: 1; /* 动画进行到20%时完全显示 */
+        transform: translate(-50%, -50%) translateY(0); /* 回到中心位置 */
+      }
+      80% {
+        opacity: 1; /* 在80%之前保持完全显示 */
+        transform: translate(-50%, -50%) translateY(-20px); /* 向上移动20px */
+      }
+      100% {
+        opacity: 0; /* 动画结束时完全透明 */
+        transform: translate(-50%, -50%) translateY(-40px); /* 继续向上移动40px，最终消失 */
+      }
+    }
+
+    /* 按钮的基本样式 */
+    button {
+      display: block; /* 块级元素，便于居中 */
+      margin: 20px auto; /* 外边距，上下20px，水平居中 */
+      padding: 10px 20px; /* 内边距，上下10px，左右20px */
+      font-size: 16px; /* 字体大小 */
+      cursor: pointer; /* 鼠标悬停时显示手型光标 */
+      background-color: #4CAF50; /* 绿色背景 */
+      color: white; /* 白色文字 */
+      border: none; /* 无边框 */
+      border-radius: 5px; /* 圆角边框 */
+    }
+
+    /* 按钮悬停时的样式 */
+    button:hover {
+      background-color: #45a049; /* 悬停时背景色变深 */
+    }
+  </style>
+</head>
+<body>
+<!-- 触发弹窗的按钮，点击时调用showPopup函数并传递文本 -->
+<button onclick="showPopup('+50经验')">显示弹窗</button>
+
+<!-- 弹窗元素，默认隐藏 -->
+<div id="popup" class="popup"></div>
+
+<script>
+  // 定义显示弹窗的函数，参数text为要显示的文本
+  function showPopup(text) {
+    const popup = document.getElementById('popup'); // 获取弹窗元素
+    popup.textContent = text; // 设置弹窗的文本内容
+    popup.classList.add('show-popup'); // 添加show-popup类，触发动画
+
+    // 添加动画结束事件监听器
+    popup.addEventListener('animationend', function() {
+      popup.classList.remove('show-popup'); // 动画结束后移除show-popup类，重置状态
+    }, { once: true }); // 设置为一次性监听，避免重复触发
+  }
+</script>
+</body>
+</html>

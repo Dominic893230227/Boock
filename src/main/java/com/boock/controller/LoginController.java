@@ -1,21 +1,19 @@
 package com.boock.controller;
 
-import com.boock.dao.LoginMapper;
 import com.boock.entity.dto.UserDto;
+import com.boock.entity.po.Rank;
 import com.boock.entity.po.User;
+import com.boock.entity.po.UserLevel;
 import com.boock.service.LoginService;
+import com.boock.service.UserLevelService;
 import com.boock.util.CookieUtil;
-import com.boock.util.EncryptionUtil;
 import com.boock.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,6 +22,9 @@ public class LoginController {
 
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private UserLevelService userLevelService;
 
     @GetMapping("/test")
     public String test(HttpServletRequest request){
@@ -61,14 +62,12 @@ public class LoginController {
 
     @PostMapping("/registe")
     public Map<String,Object> registe(@RequestBody User user){    //Map<String,Object>
-        Map<String, Object> map = new HashMap<>();
-        boolean flag = loginService.registe(user);
-        if(flag==true){
-            map.put("flag",flag);
-            map.put("msg","注册成功");
-        }else{
-            map.put("flag",flag);
-            map.put("msg","注册失败");
+        HashMap<String, Object> map = loginService.registe(user);
+
+        if(user.getId()!=null){
+            UserLevel userLevel = UserLevel.builder().userId(user.getId()).userName(user.getName()).rank(Rank.F).exp(0)
+                    .build();
+            userLevelService.addUserLevel(userLevel);
         }
         return  map;
     }

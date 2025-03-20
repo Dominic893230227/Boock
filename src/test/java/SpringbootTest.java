@@ -1,22 +1,16 @@
 import com.boock.BoockApplication;
 import com.boock.entity.po.Comment;
-import com.boock.util.Base64Utils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @SpringBootTest(classes = BoockApplication.class)
 public class SpringbootTest {
@@ -81,5 +75,6 @@ public class SpringbootTest {
 
         System.out.println(JwtToken);
     }
+
 }
 

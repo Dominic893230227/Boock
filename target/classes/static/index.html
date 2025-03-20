@@ -13,6 +13,8 @@
 </head>
 <body class="containBody">
 <div id="particles-js"></div>
+<div id="popup" class="popup"></div>
+<div id="attention" class="attention"></div>
 <div class="main-panel">
     <div class="menu-panel">
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="top-menu">
@@ -30,16 +32,17 @@
                         <!--                            <a class="nav-link" href="#">写</a>-->
                         <!--                        </li>-->
 
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/boock/my_boock.html">我的</a>
-                        </li>
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link active" aria-current="page" href="/boock/my_boock.html">我的</a>-->
+<!--                        </li>-->
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/boock/write_page.html">创作</a>
                         </li>
                     </ul>
                     <div class="d-flex" role="search">
-                        <input id="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" onclick="search()">Search</button>
+                        <input id="search" class="form-control me-2" type="search" placeholder="搜索"
+                               aria-label="Search">
+                        <button class="btn btn-outline-success" style="width: 150px" onclick="search()">搜索</button>
                     </div>
                     <ul class="navbar-nav me-0">
                         <li class="nav-item">
@@ -53,9 +56,11 @@
                                data-bs-toggle="dropdown" aria-expanded="false">
                                 我的
                             </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/person_center/index.html" >个人中心</a></li>
-                                <li><a class="dropdown-item" href="/boock/write_page.html"da>创作</a></li>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/person_center/index.html">个人中心</a></li>
+                                <li><a class="dropdown-item" href="/boock/write_page.html" da>创作</a></li>
+                                <li class="systemManageLi"><a class="dropdown-item" href="/user/index.html"
+                                                              da>系统管理</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -78,7 +83,12 @@
 </body>
 <script>
     $(function () {
-        particlesJS.load('particles-js', '/js/particles.json', function() {
+        const expAttention = localStorage.getItem('expAttention');
+        if(expAttention != null){
+            expAlert(expAttention);
+        }
+
+        particlesJS.load('particles-js', '/js/particles.json', function () {
             console.log('callback - particles.js config loaded');
         });
         loadUser();
@@ -90,6 +100,33 @@
 
     })
 
+    function expAlert(expAttention) {
+        const popup = document.getElementById('popup'); // 获取弹窗元素
+        popup.textContent = expAttention; // 设置弹窗的文本内容
+        popup.classList.add('show-pop'); // 添加show-popup类，触发动画
+        localStorage.removeItem('expAttention')
+
+        // 添加动画结束事件监听器
+        popup.addEventListener('animationend', function() {
+            popup.classList.remove('show-pop'); // 动画结束后移除show-popup类，重置状态
+        }, { once: true }); // 设置为一次性监听，避免重复触发
+
+    }
+
+
+    function attentionAlert(expAttention) {
+        const attention = document.getElementById('attention'); // 获取弹窗元素
+        attention.textContent = expAttention; // 设置弹窗的文本内容
+        attention.classList.add('show-pop'); // 添加show-popup类，触发动画
+        localStorage.removeItem('expAttention')
+
+        // 添加动画结束事件监听器
+        attention.addEventListener('animationend', function() {
+            attention.classList.remove('show-pop'); // 动画结束后移除show-popup类，重置状态
+        }, { once: true }); // 设置为一次性监听，避免重复触发
+
+    }
+
     function loadUser() {
         $.ajax({
             type: 'Get',
@@ -97,10 +134,13 @@
             dataType: 'json',
             success: function (data) {
                 $("#userDropDown").text(data.name)
-                if(data.UserPhoto!==null){
-                    $(".head-photo").attr("src", "/headPhoto/"+data.UserPhoto.fileName)
+                if (data.UserPhoto !== null) {
+                    $(".head-photo").attr("src", "/headPhoto/" + data.UserPhoto.fileName)
                 }
                 $("#id").val(data.id)
+                if (data.id == 1 && data.username == 'admin') {
+                    $(".systemManageLi").show()
+                }
                 $("#username").val(data.username)
             },
             error: function (xhr, error) {
@@ -132,7 +172,7 @@
         })
     }
 
-    function loadAllBoock(){
+    function loadAllBoock() {
         return new Promise((resolve, reject) => {
             $.ajax({
                 type: 'Get',
@@ -144,7 +184,7 @@
                         let boock = data[i].boock;
                         let userPhoto = data[i].userPhoto;
                         let time = boock.createTime;
-                        time = time.replaceAll("T"," ")
+                        time = time.replaceAll("T", " ")
                         var icontent = `<div id="${boock.id}" class="article">
                                         <div class="arthur">
                                             <ul class="ul-arthur">
@@ -157,7 +197,7 @@
                                                 ${boock.content}
                                             </div>
                                             <div class="expand-panel">
-                                                 <div class="expand-button-div">展开</div>
+                                                 <div class="expand-button-div" onclick="expand(this)" flag="0">展开</div>
                                             </div>
                                             <div class="comment-action-panel" style="margin-top: 10px">
                                                 <div class="comment-time">${time}</div>
@@ -177,11 +217,11 @@
                         var listComment = data[i].listCommentVo;
                         for (let j = 0; j < listComment.length; j++) {
                             let replyMsg = "：";
-                            if (listComment[j].comment.replyToId!=null && listComment[j].comment.replyToId!=""){
-                                replyMsg = "回复"+listComment[j].comment.replyToName+"：";
+                            if (listComment[j].comment.replyToId != null && listComment[j].comment.replyToId != "") {
+                                replyMsg = "回复" + listComment[j].comment.replyToName + "：";
                             }
                             let time = listComment[j].comment.createTime;
-                            time = time.replaceAll("T"," ")
+                            time = time.replaceAll("T", " ")
                             var icomment = `<div id="${listComment[j].comment.id}" class="comment-iDetail">
                                             <img src="/headPhoto/${listComment[j].userPhoto.fileName}" class="head-photo3">
                                             <span>${listComment[j].comment.name}${replyMsg}${listComment[j].comment.comment}</span>
@@ -190,7 +230,7 @@
                                             <div class="comment-time">${time}</div>
                                             <div class="comment-action" onclick="reply(this)" replyToUserId="${listComment[j].comment.userId}" replyToName="${listComment[j].comment.name}" replyToId="${listComment[j].comment.id}">回复</div>
                                         </div>`;
-                            $("#"+boock.id).find("div[class = 'comment-detail-panel']").append(icomment);
+                            $("#" + boock.id).find("div[class = 'comment-detail-panel']").append(icomment);
                         }
                     }
 
@@ -208,59 +248,43 @@
 
     }
 
-    function dealBoock(){
+    function dealBoock() {
         var articles = $("#main-context").find(".article");
         for (let i = 0; i < articles.length; i++) {
             let $contentDetail = $(articles[i]).find(".detail");
             let $expandPanel = $(articles[i]).find(".expand-panel");
             const $expandButtonDiv = $(articles[i]).find(".expand-button-div");
             const $content = $(articles[i]).find(".content"); // 获取 content 元素
-            if ($contentDetail[0].scrollHeight > 300) {
-                $expandPanel.show();
-            } else {
-                $expandPanel.hide();
-            }
 
-            $expandButtonDiv.click(function() {
-                $contentDetail.toggleClass('expanded');
-                if ($contentDetail.hasClass('expanded')) {
-                    $(this).text('收起');
-                } else {
-                    $(this).text('展开');
-                }
-            });
+            if($contentDetail[0].scrollHeight <= 300){
+                $expandPanel.hide();
+            }else{
+                $expandPanel.show();
+            }
         }
-        // const $contentDetail = $("#" + boock.id).find(".detail");
-        // const $expandPanel = $("#" + boock.id).find(".expand-panel");
-        // const $expandButtonDiv = $("#" + boock.id).find(".expand-button-div");
-        // const $content = $("#" + boock.id).find(".content"); // 获取 content 元素
-        //
-        //
-        // if ($contentDetail[0].scrollHeight > 300) {
-        //     $expandPanel.show();
-        // } else {
-        //     $expandPanel.hide();
-        // }
-        //
-        // $expandButtonDiv.click(function() {
-        //     $contentDetail.toggleClass('expanded');
-        //     if ($contentDetail.hasClass('expanded')) {
-        //         $(this).text('收起');
-        //     } else {
-        //         $(this).text('展开');
-        //     }
-        // });
     }
 
-    function reply(obj){
-        if($(obj).attr("replyToId")!=null && $(obj).attr("replyToId")!=""){
-            $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").val("回复"+$(obj).attr("replyToName")+"：");
-        }else {
+    function expand(obj) {
+        let $detail = $(obj).parent().parent().find(".detail");
+        if ($detail.hasClass('expanded')) {
+            $detail.css('max-height', '300px'); // 收起时直接回到 300px
+            $(obj).text('展开');
+        } else {
+            $detail.css('max-height', $detail[0].scrollHeight + 'px'); // 展开时设置为实际高度
+            $(obj).text('收起');
+        }
+        $detail.toggleClass('expanded');
+    }
+
+    function reply(obj) {
+        if ($(obj).attr("replyToId") != null && $(obj).attr("replyToId") != "") {
+            $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").val("回复" + $(obj).attr("replyToName") + "：");
+        } else {
             $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").val("");
         }
-        $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").attr("replyToUserId",$(obj).attr("replyToUserId"));
-        $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").attr("replyToName",$(obj).attr("replyToName"));
-        $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").attr("replyToId",$(obj).attr("replyToId"));
+        $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").attr("replyToUserId", $(obj).attr("replyToUserId"));
+        $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").attr("replyToName", $(obj).attr("replyToName"));
+        $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").attr("replyToId", $(obj).attr("replyToId"));
 
     }
 
@@ -269,15 +293,19 @@
         let replyToName = $(obj).siblings('.comment-text').attr("replyToName");
         let replyToId = $(obj).siblings('.comment-text').attr("replyToId");
         var commentText = $(obj).siblings('.comment-text').val();
+        if(commentText==null || commentText==""){
+            attentionAlert("评论不能为空！");
+            return;
+        }
         let textIndex = commentText.indexOf("：");
-        if(textIndex!==-1){
-            commentText = commentText.substring(textIndex+1);
+        if (textIndex !== -1) {
+            commentText = commentText.substring(textIndex + 1);
         }
 
         var contentId = $(obj).closest('.article').attr('id');
         var param = {
-            userId:$("#id").val(),
-            name:$("#name").val(),
+            userId: $("#id").val(),
+            name: $("#name").val(),
             contentId: contentId,
             comment: commentText,
             createBy: $("#id").val(),
@@ -286,57 +314,59 @@
             replyToId: replyToId
         }
         $.ajax({
-            url:"/boock/addComment",
-            method:"POST",
+            url: "/boock/addComment",
+            method: "POST",
             data: JSON.stringify(param),
-            contentType:"application/json",
-            success: function(response) {
+            contentType: "application/json",
+            success: function (response) {
                 // console.log('Success:', response); // 处理成功响应
                 alert("评论成功");
                 $("#main-context").empty();
                 loadAllBoock();
+                expAlert('+20Exp')
             },
-            error: function(error) {
+            error: function (error) {
                 console.error('Error:', error); // 处理错误响应
                 alert("评论失败")
             }
         })
     }
 
-    function search(){
-        $.ajax({
-            type: 'Get',
-            data: {
-                search : $("#search").val()
-            },
-            url: '/boock/search',
-            dataType: 'json',
-            success: function (data) {
-                $("#main-context").empty();
-                let userpanelHtml = `<div class="search-title">搜索到的用户</div><div class="search-user-panel"></div>`
-                $("#main-context").append(userpanelHtml);
-                if (data.User==null || data.User == ""){
-                    $(".search-user-panel").append(`没有搜到相关用户`);
-                }
-                for (let i = 0; i < data.User.length; i++) {
-                    let user = data.User[i];
-                    let userPhotoPath = "/images/龙.png";
-                    if(user.userPhoto!=null){
-                        userPhotoPath = user.userPhoto.path;
+    function search() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'Get',
+                data: {
+                    search: $("#search").val()
+                },
+                url: '/boock/search',
+                dataType: 'json',
+                success: function (data) {
+                    $("#main-context").empty();
+                    let userpanelHtml = `<div class="search-title">搜索到的用户</div><div class="search-user-panel"></div>`
+                    $("#main-context").append(userpanelHtml);
+                    if (data.User == null || data.User == "") {
+                        $(".search-user-panel").append(`没有搜到相关用户`);
                     }
-                    var iuserhtml = `<div class="search-user">
-                                        <img class="head-photo4" src="${userPhotoPath}">
+                    for (let i = 0; i < data.User.length; i++) {
+                        let user = data.User[i];
+                        let userPhotoPath = "/images/龙.png";
+                        if (user.userPhoto != null) {
+                            userPhotoPath = user.userPhoto.fileName;
+                        }
+                        var iuserhtml = `<div class="search-user">
+                                        <img class="head-photo4" src="/headPhoto/${userPhotoPath}">
                                         <span>${user.name}</span>
                                     </div>`
-                    $(".search-user-panel").append(iuserhtml)
-                }
-                $("#main-context").append(`<div class="search-title" style="margin-top:20px">搜索到的Boock</div>`);
-                for (let i = 0; i < data.Boock.length; i++) {
-                    let boock = data.Boock[i].boock;
-                    let userPhoto = data.Boock[i].userPhoto;
-                    let time = boock.createTime;
-                    time = time.replaceAll("T"," ")
-                    var icontent = `<div id="${boock.id}" class="article">
+                        $(".search-user-panel").append(iuserhtml)
+                    }
+                    $("#main-context").append(`<div class="search-title" style="margin-top:20px">搜索到的Boock</div>`);
+                    for (let i = 0; i < data.Boock.length; i++) {
+                        let boock = data.Boock[i].boock;
+                        let userPhoto = data.Boock[i].userPhoto;
+                        let time = boock.createTime;
+                        time = time.replaceAll("T", " ")
+                        var icontent = `<div id="${boock.id}" class="article">
                                         <div class="arthur">
                                             <ul class="ul-arthur">
                                                 <li class="li-head-photo"><img src="/headPhoto/${userPhoto.fileName}" class="head-photo2"></li>
@@ -347,7 +377,10 @@
                                             <div class="detail">
                                                 ${boock.content}
                                             </div>
-                                             <div class="comment-action-panel" style="margin-top: 10px">
+                                            <div class="expand-panel">
+                                                 <div class="expand-button-div" onclick="expand(this)" flag="0">展开</div>
+                                            </div>
+                                            <div class="comment-action-panel" style="margin-top: 10px">
                                                 <div class="comment-time">${time}</div>
                                                 <div class="comment-action" style="margin: 0px" onclick="reply(this)" replyTo="" replyToId="">回复</div>
                                             </div>
@@ -361,16 +394,16 @@
                                             </div>
                                         </div>
                                     </div>`;
-                    $("#main-context").append(icontent);
-                    var listComment = data.Boock[i].listCommentVo;
-                    for (let j = 0; j < listComment.length; j++) {
-                        let replyMsg = "：";
-                        if (listComment[j].comment.replyToId!=null && listComment[j].comment.replyToId!=""){
-                            replyMsg = "回复"+listComment[j].comment.replyToName+"：";
-                        }
-                        let time = listComment[j].comment.createTime;
-                        time = time.replaceAll("T"," ")
-                        var icomment = `<div id="${listComment[j].comment.id}" class="comment-iDetail">
+                        $("#main-context").append(icontent);
+                        var listComment = data.Boock[i].listCommentVo;
+                        for (let j = 0; j < listComment.length; j++) {
+                            let replyMsg = "：";
+                            if (listComment[j].comment.replyToId != null && listComment[j].comment.replyToId != "") {
+                                replyMsg = "回复" + listComment[j].comment.replyToName + "：";
+                            }
+                            let time = listComment[j].comment.createTime;
+                            time = time.replaceAll("T", " ")
+                            var icomment = `<div id="${listComment[j].comment.id}" class="comment-iDetail">
                                             <img src="/headPhoto/${listComment[j].userPhoto.fileName}" class="head-photo3">
                                             <span>${listComment[j].comment.name}${replyMsg}${listComment[j].comment.comment}</span>
                                         </div>
@@ -378,14 +411,24 @@
                                             <div class="comment-time">${time}</div>
                                             <div class="comment-action" onclick="reply(this)" replyToUserId="${listComment[j].comment.userId}" replyToName="${listComment[j].comment.name}" replyToId="${listComment[j].comment.id}">回复</div>
                                         </div>`;
-                        $("#"+boock.id).find("div[class = 'comment-detail-panel']").append(icomment);
+                            $("#" + boock.id).find("div[class = 'comment-detail-panel']").append(icomment);
+                        }
                     }
+                    const delay = Math.min(data.Boock.length * 50, 1000); // 每个帖子 50ms，最多 1秒
+                    setTimeout(() => {
+                        resolve();
+                    }, delay);
+                },
+                error: function (error) {
+                    alert("Logout failed. Please try again later.");
                 }
-            },
-            error: function (error) {
-                alert("Logout failed. Please try again later.");
-            }
-        })
+            })
+        }).then(data => {
+            dealBoock(); // 立马跑dealBoock
+        }).catch(error => {
+            console.log("操，搜索挂了:", error); // 出错随便处理
+        });
+
     }
 </script>
 </html>

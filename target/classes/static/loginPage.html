@@ -186,11 +186,13 @@
             data: JSON.stringify(user),
             success: function (data){
                 alert(data.msg);
-                $("#registeUsername").val('')
-                $("#registeName").val('')
-                $("#registePassword").val('')
-                $("#reRegistePassword").val('')
-                toLogin()
+                if(data.flag==true){
+                    $("#registeUsername").val('')
+                    $("#registeName").val('')
+                    $("#registePassword").val('')
+                    $("#reRegistePassword").val('')
+                    toLogin()
+                }
             },
             error: function (error){
                 alert(data.msg)
