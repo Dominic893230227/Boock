@@ -2,6 +2,7 @@ package com.boock.entity.vo;
 
 
 import com.boock.entity.po.Boock;
+import com.boock.entity.po.UserLevel;
 import com.boock.entity.po.UserPhoto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class BoockVo {
     private Boock boock;
     private UserPhoto userPhoto;
     private List<CommentVo> listCommentVo;
+    private UserLevel userLevel;
 }

@@ -2,12 +2,10 @@ package com.boock.service.impl;
 
 import com.boock.dao.BoockMapper;
 import com.boock.dao.UserMapper;
-import com.boock.entity.po.Boock;
-import com.boock.entity.po.Comment;
-import com.boock.entity.po.User;
-import com.boock.entity.po.UserPhoto;
+import com.boock.entity.po.*;
 import com.boock.entity.vo.BoockVo;
 import com.boock.entity.vo.CommentVo;
+import com.boock.repository.UserLevelRepository;
 import com.boock.service.BoockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +19,8 @@ public class BoockServiceImpl implements BoockService {
     private BoockMapper boockMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserLevelRepository userLevelRepository;
 
     @Override
     public Integer saveBoock(Boock boock) {
@@ -52,6 +52,9 @@ public class BoockServiceImpl implements BoockService {
                 listCommentVos.add(commentVo);
             }
             boockVo.setListCommentVo(listCommentVos);
+
+            UserLevel userLevel = userLevelRepository.findByUserId(boock.getUserId());
+            boockVo.setUserLevel(userLevel);
 
             boockVos.add(boockVo);
         }
@@ -130,6 +133,12 @@ public class BoockServiceImpl implements BoockService {
         }
         result.put("User",userList);
         return result;
+    }
+
+    @Override
+    public void deleteBoock(String boockId) {
+        boockMapper.deleteBoock(boockId);
+        boockMapper.deleteComment(boockId);
     }
 
     /***

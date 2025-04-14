@@ -1,18 +1,20 @@
 package com.boock.controller;
 
 import com.boock.entity.po.User;
+import com.boock.entity.po.UserLevel;
 import com.boock.entity.po.UserPhoto;
+import com.boock.service.UserLevelService;
 import com.boock.service.UserService;
 import com.boock.util.CookieUtil;
 import com.boock.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -28,6 +30,9 @@ public class UserController {
     private String windowsFilePath;
     @Value("${file.path.linux}")
     private String linuxFilePath;
+
+    @Autowired
+    private UserLevelService userLevelService;
 
     @GetMapping("/test")
     public HashMap<String, String> test(HttpServletRequest request){
@@ -51,26 +56,32 @@ public class UserController {
 //        String username = (String) tokenMap.get("username");
 //        String name = (String) tokenMap.get("name");
         UserPhoto userPhoto = userService.loadUserPhoto(id);
+
+        UserLevel userLevel = userService.getUserLevel(id);
         HashMap<String, Object> result = new HashMap<>();
         result.put("id",id);
         result.put("username",user.getUsername());
         result.put("name",user.getName());
         result.put("UserPhoto",userPhoto);
+
+        result.put("UserLevel",userLevel);
         return result;
     }
 
     @GetMapping("/loadUserInfo")
-    public Map<String,Object> loadUserInfo(@RequestParam Integer id){
+    public Map<String,Object> loadUserInfo(@RequestParam("id") Integer id){
         HashMap<String, Object> map = new HashMap<>();
         User user = userService.loadUserInfo(id);
         UserPhoto userPhoto = userService.loadUserPhoto(id);
         map.put("User",user);
         map.put("UserPhoto",userPhoto);
+        UserLevel userLevelById = userLevelService.findUserLevelById(id);
+        map.put("UserLevel",userLevelById);
         return map;
     }
 
     @PostMapping("/saveInfo")
-    public String saveInfo(@RequestParam(value = "file",required = false) MultipartFile file,@RequestPart String userJson) throws IOException {
+    public String saveInfo(@RequestParam(value = "file",required = false) MultipartFile file,@RequestPart(value = "userJson") String userJson) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         User user = objectMapper.readValue(userJson, User.class);

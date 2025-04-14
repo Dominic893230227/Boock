@@ -8,11 +8,11 @@ import com.boock.service.LoginService;
 import com.boock.service.UserLevelService;
 import com.boock.util.CookieUtil;
 import com.boock.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +37,7 @@ public class LoginController {
 
 
     @PostMapping
-    public Map<String,Object> login(@RequestBody UserDto userDto,HttpServletResponse response){ //@RequestParam String username,@RequestParam String password
+    public Map<String,Object> login(@RequestBody UserDto userDto, HttpServletResponse response){ //@RequestParam String username,@RequestParam String password
         Map<String, Object> hashMap = new HashMap<>();
         if (userDto.getUsername()==null || userDto.getUsername().equals("")){
             hashMap.put("flag",false);

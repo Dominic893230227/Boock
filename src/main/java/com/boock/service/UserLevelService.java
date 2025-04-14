@@ -9,4 +9,6 @@ public interface UserLevelService {
 
     HashMap<String,Object> add50Exp(Integer userId);
     HashMap<String,Object> add20Exp(Integer userId);
+
+    UserLevel findUserLevelById(Integer id);
 }

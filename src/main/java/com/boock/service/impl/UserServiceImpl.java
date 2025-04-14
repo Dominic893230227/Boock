@@ -2,7 +2,9 @@ package com.boock.service.impl;
 
 import com.boock.dao.UserMapper;
 import com.boock.entity.po.User;
+import com.boock.entity.po.UserLevel;
 import com.boock.entity.po.UserPhoto;
+import com.boock.repository.UserLevelRepository;
 import com.boock.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserLevelRepository userLevelRepository;
 
     public Map<String,Object> savePhoto(User user, String fileName, String filePath) {
         UserPhoto photo = userMapper.findPhoto(user.getId());
@@ -48,6 +53,12 @@ public class UserServiceImpl implements UserService {
     public UserPhoto loadUserPhoto(Integer id) {
         UserPhoto userPhoto = userMapper.findPhoto(id);
         return userPhoto;
+    }
+
+    @Override
+    public UserLevel getUserLevel(Integer id) {
+        UserLevel userLevel = userLevelRepository.findByUserId(id);
+        return userLevel;
     }
 
 }

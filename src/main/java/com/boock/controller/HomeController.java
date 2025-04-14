@@ -1,18 +1,12 @@
 package com.boock.controller;
 
-import com.boock.entity.dto.UserDto;
-import com.boock.entity.po.User;
-import com.boock.service.LoginService;
 import com.boock.util.CookieUtil;
-import com.boock.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import java.util.HashMap;
 import java.util.Map;
 

@@ -2,14 +2,12 @@ package com.boock.interceptor;
 
 import com.boock.util.CookieUtil;
 import com.boock.util.JwtUtil;
-import org.springframework.context.annotation.Configuration;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Component
@@ -28,8 +26,8 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
         String token = map.get("token");
         if(token==null||!JwtUtil.checkToken(token)){
             if(request.getHeader("x-requested-with") != null && request.getHeader("x-requested-with")
-                    .equalsIgnoreCase("XMLHttpRequest")){
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    .equalsIgnoreCase("XMLHttpRequest")){//判断是不是ajax请求 ，如果是，就返回403
+                response.setStatus(javax.servlet.http.HttpServletResponse.SC_FORBIDDEN);
                 return false;
             }else{
                 //返回登录页

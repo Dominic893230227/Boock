@@ -60,5 +60,10 @@ public class BoockController {
         Map<String, Object> result = boockService.search(param);
         return result;
     }
+
+    @DeleteMapping("/delete")
+    public void deleteBoock(@RequestParam(value = "boockId") String boockId){
+        boockService.deleteBoock(boockId);
+    }
 }
 

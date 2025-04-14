@@ -59,15 +59,6 @@ html, body {
     padding-bottom: 120px;
 }
 
-.head-photo {
-    width: 40px; /* 设置头像的宽度 */
-    height: 40px; /* 设置头像的高度 */
-    border-radius: 50%; /* 设置圆角为50%，实现圆形效果 */
-    object-fit: cover; /* 确保图片内容在保持纵横比的同时填充元素的整个内容框 */
-    border: 2px solid #ccc; /* 可选：添加边框 */
-    margin-left: 10px;
-}
-
 .head-photo2 {
     width: 80px; /* 设置头像的宽度 */
     height: 80px; /* 设置头像的高度 */
@@ -123,6 +114,11 @@ html, body {
 
 .li-name {
 
+}
+
+.boock-level-img{
+    width: 30px;
+    height: 30px;
 }
 
 .content {
@@ -274,61 +270,3 @@ html, body {
     border: 2px solid #ccc; /* 可选：添加边框 */
 }
 
-
-.popup {
-    position: fixed; /* 固定定位，使弹窗相对于视口位置固定 */
-    top: 50%; /* 垂直居中 */
-    left: 50%; /* 水平居中 */
-    transform: translate(-50%, -50%); /* 通过偏移调整，使弹窗中心对齐屏幕中心 */
-    background-color: rgba(0, 0, 0, 0.8); /* 黑色半透明背景 */
-    color: white; /* 文字颜色为白色 */
-    padding: 10px 20px; /* 内边距，上下10px，左右20px */
-    border-radius: 5px; /* 圆角边框 */
-    font-size: 20px; /* 字体大小 */
-    font-family: Arial, sans-serif; /* 字体类型 */
-    opacity: 0; /* 默认透明，隐藏弹窗 */
-    pointer-events: none; /* 防止弹窗干扰其他元素（如点击穿透） */
-    z-index: 1000; /* 设置层级，确保弹窗在最上层 */
-}
-
-
-.attention {
-    position: fixed; /* 固定定位，使弹窗相对于视口位置固定 */
-    top: 50%; /* 垂直居中 */
-    left: 50%; /* 水平居中 */
-    transform: translate(-50%, -50%); /* 通过偏移调整，使弹窗中心对齐屏幕中心 */
-    background-color: rgba(255, 0, 0, 0.8); /* 黑色半透明背景 */
-    color: white; /* 文字颜色为白色 */
-    padding: 10px 20px; /* 内边距，上下10px，左右20px */
-    border-radius: 5px; /* 圆角边框 */
-    font-size: 20px; /* 字体大小 */
-    font-family: Arial, sans-serif; /* 字体类型 */
-    opacity: 0; /* 默认透明，隐藏弹窗 */
-    pointer-events: none; /* 防止弹窗干扰其他元素（如点击穿透） */
-    z-index: 1000; /* 设置层级，确保弹窗在最上层 */
-}
-
-/* 当弹窗显示时添加的类，用于触发动画 */
-.show-pop {
-    animation: fadeOut 2s ease-in-out forwards; /* 应用名为fadeOut的动画，持续2秒，缓动效果，动画结束后保持最终状态 */
-}
-
-/* 定义fadeOut动画的关键帧 */
-@keyframes fadeOut {
-    0% {
-        opacity: 0; /* 动画开始时完全透明 */
-        transform: translate(-50%, -50%) translateY(20px); /* 从下方20px处进入，保持居中 */
-    }
-    20% {
-        opacity: 1; /* 动画进行到20%时完全显示 */
-        transform: translate(-50%, -50%) translateY(0); /* 回到中心位置 */
-    }
-    80% {
-        opacity: 1; /* 在80%之前保持完全显示 */
-        transform: translate(-50%, -50%) translateY(-20px); /* 向上移动20px */
-    }
-    100% {
-        opacity: 0; /* 动画结束时完全透明 */
-        transform: translate(-50%, -50%) translateY(-40px); /* 继续向上移动40px，最终消失 */
-    }
-}

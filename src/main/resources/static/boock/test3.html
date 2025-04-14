@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;margin: 0">
+<head>
+  <meta charset="UTF-8">
+  <title>jQuery .on('load') 示例</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <style>
+    #imageContainer {
+      width: 200px;
+      height: 200px;
+      border: 1px solid #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #status {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div id="imageContainer">
+  <img id="myImage" style="display: none;width: 100px;height: 100px"> <span>Loading...</span>
+</div>
+<div id="status"></div>
+
+<script>
+  $(document).ready(function() {
+    const $myImage = $('#myImage');
+    const $imageContainer = $('#imageContainer');
+    const $status = $('#status');
+    const imageUrl = '/images/龙.png'; // 使用一个在线的占位图片 URL
+
+    // 监听图片的 load 事件
+    $myImage.on('load', function() {
+      $imageContainer.empty().append($myImage.show()); // 清空 "Loading..." 并显示图片
+      $status.text('图片加载成功！');
+    });
+
+    // 可选：监听图片的 error 事件
+    $myImage.on('error', function() {
+      $imageContainer.text('图片加载失败。');
+      $status.text('加载失败！请检查图片 URL。');
+    });
+
+    // 设置图片的 src 属性，触发图片加载
+    $myImage.attr('src', imageUrl);
+  });
+</script>
+
+</body>
+</html>

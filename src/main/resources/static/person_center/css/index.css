@@ -65,6 +65,17 @@ html, body {
     align-items: center;
 }
 
+.level-panel{
+    width: 300px;
+    height: 300px;
+    margin-left: 20px;
+}
+
+.level-panel img{
+    width: 300px;
+    height: 300px;
+}
+
 .photo-panel img{
     width: 150px;
     height: 150px;

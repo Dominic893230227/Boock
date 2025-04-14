@@ -12,7 +12,7 @@ import java.util.UUID;
 public class JwtUtil {
 
 
-    public static long time = 1000*60*60*2;
+    public static long time = 1000*60*60*5;
     public static String APP_SECRET = "ymzldnrwrcccydzzgjwcwycicoywynswdswdwsndszdyykyyjhbzzjydkjdkbrhxybnzwjybbbblzdnldhxqdrsnyy";
 
     public static String creatJwtToken(Integer id,String username,String name){
@@ -26,7 +26,7 @@ public class JwtUtil {
                 .claim("username",username)
                 .claim("name",name)
                 .setSubject("jwt-user")
-                //token过期时间：1小时
+
                 .setExpiration(new Date(System.currentTimeMillis()+time ))
                 .setId(UUID.randomUUID().toString())//id字段
                 //签名

@@ -18,4 +18,5 @@ public interface BoockService {
 
     Map<String,Object> search(String param);
 
+    void deleteBoock(String boockId);
 }

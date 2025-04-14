@@ -24,6 +24,8 @@ public class UserLevelServiceImpl implements UserLevelService {
         repo.save(userLevel);
     }
 
+
+
     @Override
     public HashMap<String, Object> add50Exp(Integer userId) {
         HashMap<String, Object> map = new HashMap<>();
@@ -42,8 +44,8 @@ public class UserLevelServiceImpl implements UserLevelService {
         }else{
             if(exp + 50>100*userLevel.getRank().getValue()){
                 Rank nextLevel = getNextRank(userLevel.getRank());
-                userLevel.setRank(nextLevel);
                 userLevel.setExp(exp+50-100*userLevel.getRank().getValue());
+                userLevel.setRank(nextLevel);
                 map.put("msg","+50 Exp,恭喜你已升至"+nextLevel+"级");
                 repo.save(userLevel);
             }else{
@@ -73,8 +75,8 @@ public class UserLevelServiceImpl implements UserLevelService {
         }else{
             if(exp + 20>100*userLevel.getRank().getValue()){
                 Rank nextLevel = getNextRank(userLevel.getRank());
-                userLevel.setRank(nextLevel);
                 userLevel.setExp(exp+20-100*userLevel.getRank().getValue());
+                userLevel.setRank(nextLevel);
                 map.put("msg","+20 Exp,恭喜你已升至"+nextLevel+"级");
                 repo.save(userLevel);
             }else{
@@ -84,6 +86,12 @@ public class UserLevelServiceImpl implements UserLevelService {
             }
         }
         return map;
+    }
+
+    @Override
+    public UserLevel findUserLevelById(Integer id) {
+        UserLevel userLevel = repo.findByUserId(id);
+        return userLevel;
     }
 
     private Rank getNextRank(Rank currentRank) {

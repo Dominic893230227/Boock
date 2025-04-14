@@ -10,6 +10,12 @@
         insert into bk_comment (id, content_id, user_id, name, comment, create_by, create_time, reply_to_id, reply_to_user_id, reply_to_name)
         VALUES (#{comment.id},#{comment.contentId},#{comment.userId},#{comment.name},#{comment.comment},#{comment.createBy},#{comment.createTime},#{comment.replyToId},#{comment.replyToUserId},#{comment.replyToName})
     </insert>
+    <delete id="deleteBoock">
+        delete from bk_content where id = #{boockId}
+    </delete>
+    <delete id="deleteComment">
+        delete from bk_comment where content_id = #{boockId}
+    </delete>
     <select id="getAllBoock" resultType="com.boock.entity.po.Boock">
         select id,user_id,name,content,create_by,create_time from bk_content order by create_time desc
     </select>

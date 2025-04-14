@@ -1,15 +1,16 @@
 package com.boock.util;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class CookieUtil {
 
-    public static void addCookie(HttpServletResponse response,String path,
-                                 String name,String value,int maxAge,boolean httpOnly){
+    public static void addCookie(HttpServletResponse response, String path,
+                                 String name, String value, int maxAge, boolean httpOnly){
         Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(-1);
         cookie.setPath(path);

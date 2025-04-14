@@ -21,4 +21,8 @@ public interface BoockMapper {
     List<Comment> getCommentByContentId(String contentId);
 
     List<Boock> search(String param);
+
+    void deleteBoock(String boockId);
+
+    void deleteComment(String boockId);
 }

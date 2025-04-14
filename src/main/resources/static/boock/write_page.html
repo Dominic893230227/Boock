@@ -55,6 +55,12 @@
         <div class="write-panel">
             <textarea name="content" id="content"></textarea>
             <div class="operate-panel">
+                <div class="upload-panel">
+                    <div class="upload-item">
+                        <img src="/images/upload-icon.png" class="upload-icon">
+                        <div>图片</div>
+                    </div>
+                </div>
                 <input type="button" class="btn btn-primary" value="发布" onclick="submit()" style="margin-left: auto;margin-right: 20px;width: 100px;">
             </div>
         </div>
@@ -91,12 +97,11 @@
             type: 'POST',
             data: JSON.stringify(param),
             contentType: 'application/json',
-            success: function(response) {
+            success: function(data) {
                 // console.log('Success:', response); // 处理成功响应
-                alert("发布成功");
                 let editor = CKEDITOR.instances.content;
                 editor.setData('');
-                localStorage.setItem('expAttention', '+50Exp');
+                localStorage.setItem('expAttention', data.msg);
                 window.location.href = "/index.html";
             },
             error: function(error) {
@@ -113,8 +118,13 @@
             dataType: 'json',
             success: function (data) {
                 $("#userDropDown").text(data.name)
-                $(".head-photo").attr("src", "/headPhoto/"+data.UserPhoto.fileName)
+                if (data.UserPhoto !== null) {
+                    $(".head-photo").attr("src", "/headPhoto/" + data.UserPhoto.fileName)
+                }
                 $("#id").val(data.id)
+                if (data.id == 1 && data.username == 'admin') {
+                    $(".systemManageLi").show()
+                }
                 $("#username").val(data.username)
             },
             error: function (xhr, error) {

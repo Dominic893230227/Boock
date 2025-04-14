@@ -7,6 +7,12 @@ spring:
     username: root
     password: 123456
     driver: com.mysql.cj.jdbc.Driver
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: deepseek-r1:7b
 mybatis:
   # mapper.xml文件位置
   mapper-locations: classpath:mapper/*.xml
@@ -20,4 +26,3 @@ file:
   boockPath:
     windows: D:/SOFTWARE/CODE/uploadFile/boock/
     linux: /opt/uploadFile/boock/
-

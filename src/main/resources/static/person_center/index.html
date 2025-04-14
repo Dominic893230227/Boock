@@ -75,6 +75,9 @@
                            aria-describedby="inputGroup-sizing-lg">
                 </div>
             </div>
+            <div class="level-panel">
+                <img id="level-image" src="/images/loading.gif" alt="">
+            </div>
         </div>
         <div class="" style=" display: flex; width: 76%;justify-content: center; align-items: center;">
             <input type="button" class="btn btn-primary" value="保存" id="saveBtn" onclick="onSave()">
@@ -162,6 +165,10 @@
 
                 // console.log(data.UserPhoto.path);//D:/SOFTWARE/CODE/idea/workspace/Boock/src/main/resources/static/uploadImage/姬霓太美.jpeg
                 $("#previewImage").attr("src", "/headPhoto/"+data.UserPhoto.fileName)
+                if(data.UserLevel!= null && data.UserLevel.rank!=null){
+
+                    $("#level-image").attr("src","/images/"+data.UserLevel.rank+".jpg")
+                }
             },
             error: function (xhr, error) {
                 if (xhr.status = '403') {
