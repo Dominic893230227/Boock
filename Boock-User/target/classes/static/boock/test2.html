@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>鼠标悬浮显示框 (JavaScript)</title>
+  <style>
+    /* 定义触发悬浮事件的元素的样式 */
+    .hover-trigger {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); /* 通过偏移调整，使弹窗中心对齐屏幕中心 */
+      border: 1px solid #ccc; /* 设置边框 */
+      padding: 10px; /* 设置内边距 */
+      cursor: pointer; /* 可选，当鼠标悬浮在其上时显示手型光标，提示用户可以互动 */
+      display: inline-block; /* 使元素在水平方向排列，但可以设置宽度和高度以及内外边距 */
+    }
+
+    /* 定义弹出框的样式 */
+    #popup-box {
+      display: none; /* 默认隐藏弹出框 */
+      position: absolute; /* 使用绝对定位，使其可以放置在页面的任何位置，通常相对于其最近的已定位的父元素 */
+      background-color: #f9f9f9; /* 设置背景颜色 */
+      border: 1px solid #ccc; /* 设置边框 */
+      padding: 10px; /* 设置内边距 */
+      z-index: 1; /* 设置元素的堆叠顺序，数值越大越靠前，确保弹出框在其他元素之上 */
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+
+<div class="hover-trigger" id="trigger-element">将鼠标悬浮在此处</div>
+
+<div id="popup-box">这是一个使用 JavaScript 控制的弹出框！</div>
+
+<script>
+  // 获取触发悬浮事件的 DOM 元素，通过其 id "trigger-element"
+  const triggerElement = document.getElementById('trigger-element');
+  // 获取弹出框的 DOM 元素，通过其 id "popup-box"
+  const popupBox = document.getElementById('popup-box');
+
+  // 为触发元素添加一个鼠标悬浮 (mouseover) 事件监听器
+  triggerElement.addEventListener('mouseover', () => {
+    // 当鼠标悬浮在触发元素上时，执行以下代码
+
+    // 显示弹出框，将其 display 属性设置为 'block'
+    popupBox.style.display = 'block';
+
+    // 获取触发元素的位置和尺寸信息
+    const rect = triggerElement.getBoundingClientRect();
+
+    // 获取弹出框的宽度
+    const popupWidth = popupBox.offsetWidth;
+
+    // 设置弹出框的位置
+    // popupBox.style.top：保持不变，出现在触发元素的下方
+    popupBox.style.top = `${rect.bottom + window.scrollY}px`;
+
+    // popupBox.style.left：设置弹出框的左侧位置
+    // rect.right：触发元素的右边缘相对于视口左侧的距离
+    // window.scrollX：当前文档水平滚动的像素数
+    // popupWidth：弹出框的宽度
+    // 我们希望弹出框的右边缘与触发元素的右边缘对齐，
+    // 所以弹出框的左边缘应该是 触发元素的右边缘 减去 弹出框的宽度
+    popupBox.style.left = `${rect.right + window.scrollX - popupWidth}px`;
+
+    popupBox.style.opacity = 1;
+
+  });
+
+  // 为触发元素添加一个鼠标移开 (mouseout) 事件监听器
+  triggerElement.addEventListener('mouseout', () => {
+    // 当鼠标移开触发元素时，执行以下代码
+
+    // 将透明度设置为 0，触发 CSS 的过渡效果，使其慢慢消失
+    popupBox.style.opacity = 0;
+
+    // 在过渡结束后隐藏元素，避免影响布局
+    setTimeout(() => {
+      if (popupBox.style.opacity === '0') {
+        popupBox.style.display = 'none';
+      }
+    }, 300); // 延迟时间应与 CSS transition 的 duration 相同 (0.3s = 300ms)
+  });
+</script>
+
+</body>
+</html>

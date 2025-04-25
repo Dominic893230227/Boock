@@ -1,0 +1,169 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.containBody {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.main-panel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /*background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("../../images/快乐新年.png") no-repeat center center fixed;*/
+    display: flex;
+    /*justify-content: center;*/
+    align-items: center;
+    flex-direction: column;
+    /*background-size: contain;*/
+    background-size: 76% 100%;
+}
+
+/*.main-panel img{*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    object-fit: contain;*/
+/*    display: block;*/
+/*}*/
+
+.menu-panel {
+    width: 100%;
+    height: 70px;
+    position: fixed;
+    top: 0;
+    /*background-color: rgba(255,255,255,0.8);*/
+    display: flex;
+    /*flex-direction: column;*/
+    /*justify-conte nt: center;*/
+    /*align-items: center;*/
+}
+
+#top-menu {
+    width: 100%;
+}
+
+.main-context {
+    display: flex;
+    width: 76%;
+
+    flex-direction: column;
+    align-items: center;
+    margin-top: 140px;;
+}
+
+.head-photo {
+    width: 40px; /* 设置头像的宽度 */
+    height: 40px; /* 设置头像的高度 */
+    border-radius: 50%; /* 设置圆角为50%，实现圆形效果 */
+    object-fit: cover; /* 确保图片内容在保持纵横比的同时填充元素的整个内容框 */
+    border: 2px solid #ccc; /* 可选：添加边框 */
+    margin-left: 10px;
+}
+
+.write-panel {
+    width: 80%;
+}
+
+.operate-panel {
+    width: 100%;
+    min-height: 80px;
+    margin-top: 15px;
+    background-color: #f1f1f1;
+    border-radius: 15px;
+    /*border: 1px solid black;*/
+    box-shadow: 5px 5px 10px #888888;
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;*/
+    justify-content: center;
+}
+
+.preview-panel {
+    margin: 10px 0px;
+    display: none;
+}
+
+.preview-div {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    margin-left: 15px;
+}
+
+.remove-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: inline-block;
+    width: 16px; /* 设置叉号的宽度 */
+    height: 16px; /* 设置叉号的高度 */
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+
+.remove-icon::before,
+.remove-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 2px; /* 设置线条的粗细 */
+    background-color: #aaa; /* 设置线条的颜色 */
+}
+
+.remove-icon::before {
+    transform: translate(-50%, -50%) rotate(45deg); /* 旋转 45 度 */
+}
+
+.remove-icon::after {
+    transform: translate(-50%, -50%) rotate(-45deg); /* 旋转 -45 度 */
+}
+
+.remove-icon:hover {
+    opacity: 1;
+}
+
+.previewImage {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+
+.operation {
+    width: 100%;
+    display: flex;
+    /*justify-content: center;*/
+    align-items: center;
+}
+
+.upload-panel {
+    width: 80%;
+    margin: 0px 10px;
+    opacity: 0.7;
+}
+
+.upload-item {
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.upload-item:hover {
+    background-color: #dcdcdc;
+}
+
+.upload-icon {
+    width: 30px;
+    height: 30px;
+}

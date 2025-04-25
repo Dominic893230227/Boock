@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/boock?characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: 123456
+    driver: com.mysql.cj.jdbc.Driver
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: deepseek-r1:7b
+mybatis:
+  # mapper.xml文件位置
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.boock.entity
+  configuration:
+    map-underscore-to-camel-case: true
+file:
+  path:
+    windows: D:/SOFTWARE/CODE/uploadFile/headPhoto/
+    linux: /opt/uploadFile/headPhoto/
+  boockPath:
+    windows: D:/SOFTWARE/CODE/uploadFile/boock/
+    linux: /opt/uploadFile/boock/
+
+
+wechat:
+  mp:
+    app-id: wx25bcf03028860fae
+    secret: 8a9511cf59e9c23a7791ac66b3653c5d
+    # 可选配置
+    token: YOUR_TOKEN
+    aes-key: YOUR_AES_KEY

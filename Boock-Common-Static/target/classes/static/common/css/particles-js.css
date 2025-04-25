@@ -1,0 +1,11 @@
+#particles-js {
+    width: 100%; /* 或者指定具体的宽度，例如 800px */
+    height: 100%; /* 或者指定具体的高度，例如 600px */
+    /* 其他样式，例如背景色 */
+    background-color: #ffffff; /* 示例背景色 */
+    /*background: url("/images/星空.jpeg");*/
+    position: fixed; /* 如果需要覆盖整个页面 */
+    top: 0;
+    left: 0;
+    z-index: -1; /* 如果需要置于其他内容下方 */
+}

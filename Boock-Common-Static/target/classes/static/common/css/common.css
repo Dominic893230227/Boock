@@ -1,0 +1,184 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.containBody {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.main-panel {
+    position: relative;
+    width: 100%;
+    /*height: 100%;*/
+    /*background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("../images/快乐新年.png") no-repeat center center fixed;*/
+    display: flex;
+    /*justify-content: center;*/
+    align-items: center;
+    flex-direction: column;
+    /*background-size: contain;*/
+    background-size: 76% 100%;
+}
+
+
+.menu-panel {
+    width: 100%;
+    height: 70px;
+    position: fixed;
+    top: 0;
+    /*background-color: rgba(255,255,255,0.8);*/
+    display: flex;
+    /*flex-direction: column;*/
+    /*justify-conte nt: center;*/
+    /*align-items: center;*/
+    z-index: 100;
+}
+
+.head-photo {
+    width: 40px; /* 设置头像的宽度 */
+    height: 40px; /* 设置头像的高度 */
+    border-radius: 50%; /* 设置圆角为50%，实现圆形效果 */
+    object-fit: cover; /* 确保图片内容在保持纵横比的同时填充元素的整个内容框 */
+    border: 2px solid #ccc; /* 可选：添加边框 */
+    margin-left: 10px;
+}
+
+.level-img{
+    width: 50px; /* 设置头像的宽度 */
+    height: 50px; /* 设置头像的高度 */
+}
+
+.hover-container {
+    cursor: pointer; /* 可选，当鼠标悬浮在其上时显示手型光标，提示用户可以互动 */
+}
+
+.hover-box {
+    width: 50px;
+    height: 50px;
+    display: none; /* 默认隐藏弹出框 */
+    position: absolute; /* 使用绝对定位，使其可以放置在页面的任何位置，通常相对于其最近的已定位的父元素 */
+
+    /*padding: 10px; !* 设置内边距 *!*/
+    z-index: 1; /* 设置元素的堆叠顺序，数值越大越靠前，确保弹出框在其他元素之上 */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.popup {
+    position: fixed; /* 固定定位，使弹窗相对于视口位置固定 */
+    top: 50%; /* 垂直居中 */
+    left: 50%; /* 水平居中 */
+    transform: translate(-50%, -50%); /* 通过偏移调整，使弹窗中心对齐屏幕中心 */
+    background-color: rgba(0, 0, 0, 0.8); /* 黑色半透明背景 */
+    color: white; /* 文字颜色为白色 */
+    padding: 10px 20px; /* 内边距，上下10px，左右20px */
+    border-radius: 5px; /* 圆角边框 */
+    font-size: 20px; /* 字体大小 */
+    font-family: Arial, sans-serif; /* 字体类型 */
+    opacity: 0; /* 默认透明，隐藏弹窗 */
+    pointer-events: none; /* 防止弹窗干扰其他元素（如点击穿透） */
+    z-index: 1000; /* 设置层级，确保弹窗在最上层 */
+}
+
+.dialog{
+    position: fixed; /* 固定定位，使弹窗相对于视口位置固定 */
+    top: 50%; /* 垂直居中 */
+    left: 50%; /* 水平居中 */
+    transform: translate(-50%, -50%); /* 通过偏移调整，使弹窗中心对齐屏幕中心 */
+    background-color: rgba(30, 144, 255, 0.8);
+    color: white; /* 文字颜色为白色 */
+    padding: 10px 20px; /* 内边距，上下10px，左右20px */
+    border-radius: 5px; /* 圆角边框 */
+    font-size: 20px; /* 字体大小 */
+    font-family: Arial, sans-serif; /* 字体类型 */
+    opacity: 0; /* 默认透明，隐藏弹窗 */
+    pointer-events: none; /* 防止弹窗干扰其他元素（如点击穿透） */
+    z-index: 1000; /* 设置层级，确保弹窗在最上层 */
+}
+
+.attention {
+    position: fixed; /* 固定定位，使弹窗相对于视口位置固定 */
+    top: 50%; /* 垂直居中 */
+    left: 50%; /* 水平居中 */
+    transform: translate(-50%, -50%); /* 通过偏移调整，使弹窗中心对齐屏幕中心 */
+    background-color: rgba(255, 0, 0, 0.8); /* 黑色半透明背景 */
+    color: white; /* 文字颜色为白色 */
+    padding: 10px 20px; /* 内边距，上下10px，左右20px */
+    border-radius: 5px; /* 圆角边框 */
+    font-size: 20px; /* 字体大小 */
+    font-family: Arial, sans-serif; /* 字体类型 */
+    opacity: 0; /* 默认透明，隐藏弹窗 */
+    pointer-events: none; /* 防止弹窗干扰其他元素（如点击穿透） */
+    z-index: 1000; /* 设置层级，确保弹窗在最上层 */
+}
+
+/* 当弹窗显示时添加的类，用于触发动画 */
+.show-pop {
+    animation: fadeOut 2s ease-in-out forwards; /* 应用名为fadeOut的动画，持续2秒，缓动效果，动画结束后保持最终状态 */
+}
+
+/* 定义fadeOut动画的关键帧 */
+@keyframes fadeOut {
+    0% {
+        opacity: 0; /* 动画开始时完全透明 */
+        transform: translate(-50%, -50%) translateY(20px); /* 从下方20px处进入，保持居中 */
+    }
+    20% {
+        opacity: 1; /* 动画进行到20%时完全显示 */
+        transform: translate(-50%, -50%) translateY(0); /* 回到中心位置 */
+    }
+    80% {
+        opacity: 1; /* 在80%之前保持完全显示 */
+        transform: translate(-50%, -50%) translateY(-20px); /* 向上移动20px */
+    }
+    100% {
+        opacity: 0; /* 动画结束时完全透明 */
+        transform: translate(-50%, -50%) translateY(-40px); /* 继续向上移动40px，最终消失 */
+    }
+}
+
+
+.pop-confirm{
+    position: fixed; /* 固定定位，使弹窗相对于视口位置固定 */
+    top: 50%; /* 垂直居中 */
+    left: 50%; /* 水平居中 */
+    transform: translate(-50%, -50%); /* 通过偏移调整，使弹窗中心对齐屏幕中心 */
+    background-color: rgba(245, 245, 245, 0.95);
+    color: #333;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    opacity: 0;
+    z-index: 1000;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none; /* 防止弹窗干扰其他元素（如点击穿透） */
+}
+
+.pop-confirm.active{
+    opacity: 1; /* 显示遮罩层 */
+    pointer-events: auto;
+}
+
+.overlay {
+    position: fixed; /* 固定定位，覆盖整个视口 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3); /* 半透明黑色背景，你可以调整透明度 */
+    z-index: 999; /* 设置一个比弹窗低的层级，确保弹窗在遮罩层之上 */
+    opacity: 0; /* 初始状态隐藏 */
+    pointer-events: none; /* 允许遮罩层捕获点击事件，阻止用户点击下层元素 */
+    transition: opacity 0.3s ease-in-out; /* 添加过渡效果 */
+}
+
+.overlay.active {
+    opacity: 1; /* 显示遮罩层 */
+    pointer-events: auto;
+}

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;margin: 0">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link href="/common/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+    <link href="/common/css/common.css" rel="stylesheet">
+    <script src="/common/js/bootstrap.bundle.js"></script>
+    <script src="/common/js/jquery-3.5.1.js"></script>
+    <script src="/ckeditor/ckeditor.js"></script>
+    <script src="/common/js/particles.js"></script>
+    <script src="/common/js/common.js"></script>
+    <link href="/common/css/particles-js.css" rel="stylesheet">
+</head>
+<body class="containBody">
+<div id="particles-js"></div>
+<div id="popup" class="popup"></div>
+<div id="dialog" class="dialog"></div>
+<div id="attention" class="attention"></div>
+<div id="overlay" class="overlay"></div>
+<div id="pop-confirm" class="pop-confirm">
+    <p style="text-align: center"></p>
+    <input type="button" class="btn btn-primary" value="确定">
+    <input type="button" style="margin-left: 20px" onclick="closePopConfirm()" class="btn btn-light" value="取消">
+</div>
+
+<div class="main-panel">
+    <div class="menu-panel">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" id="top-menu">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">Boock</a>
+                <!--                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
+                <!--                    <span class="navbar-toggler-icon"></span>-->
+                <!--                </button>-->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/index.html">全部</a>
+                        </li>
+                        <!--                        <li class="nav-item">-->
+                        <!--                            <a class="nav-link" href="#">写</a>-->
+                        <!--                        </li>-->
+
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link active" aria-current="page" href="/boock/my_boock.html">我的</a>-->
+<!--                        </li>-->
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/boock/write_page.html">创作</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex" role="search">
+                        <input id="search" class="form-control me-2" type="search" placeholder="搜索"
+                               aria-label="Search">
+                        <button class="btn btn-outline-success" style="width: 150px" onclick="search()">搜索</button>
+                    </div>
+                    <ul class="navbar-nav me-0">
+                        <li class="nav-item">
+                            <div id="hover-container" class="hover-container">
+                                <img src="/images/龙.png" class="head-photo">
+                                <input type="hidden" id="id">
+                                <input type="hidden" id="username">
+                            </div>
+                            <div id="hover-box" class="hover-box"><img id="level-img" class="level-img" src=""></div>
+                        </li>
+                        <!--                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+                        <li class="nav-item dropdown">
+                            <a id="userDropDown" class="nav-link dropdown-toggle" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                我的
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/person_center/index.html">个人中心</a></li>
+                                <li><a class="dropdown-item" href="/boock/write_page.html">创作</a></li>
+                                <li class="systemManageLi"><a class="dropdown-item" href="/user/index.html">系统管理</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" onclick="logOut()">退出账号</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="main-context" id="main-context">
+
+    </div>
+</div>
+
+<!--<div  style="float:left;width:50%;height: 100%;position: fixed;background: url('images/篝火1.png');background-size: cover;background-repeat: no-repeat;background-position: center;">-->
+<!--</div>-->
+<!--<button type="button"  class="btn btn-primary">牛</button>-->
+</body>
+<script>
+    $(function () {
+        const expAttention = localStorage.getItem('expAttention');
+        if(expAttention != null){
+            dialogAlert("发布成功");
+            setTimeout(function (){
+                expAlert(expAttention);
+            },2000)
+        }
+
+        particlesJS.load('particles-js', '/common/js/particles.json', function () {
+            console.log('callback - particles.js config loaded');
+        });
+        loadUser().then(() => {
+            loadAllBoock();
+        });
+    })
+
+    let triggerElement = document.getElementById("hover-container");
+    let popupBox = document.getElementById("hover-box");
+
+    triggerElement.addEventListener('mouseover', () => {
+        // 当鼠标悬浮在触发元素上时，执行以下代码
+
+        // 显示弹出框，将其 display 属性设置为 'block'
+        popupBox.style.display = 'block';
+
+        // 获取触发元素的位置和尺寸信息
+        const rect = triggerElement.getBoundingClientRect();
+
+        // 获取弹出框的宽度
+        const popupWidth = popupBox.offsetWidth;
+
+        // 设置弹出框的位置
+        // popupBox.style.top：保持不变，出现在触发元素的下方
+        popupBox.style.top = `${rect.bottom + window.scrollY + 15}px`;
+
+        popupBox.style.left = `${rect.right + window.scrollX - 45}px`;
+
+        popupBox.style.opacity = 1;
+
+    });
+
+    // 为触发元素添加一个鼠标移开 (mouseout) 事件监听器
+    triggerElement.addEventListener('mouseout', () => {
+        // 当鼠标移开触发元素时，执行以下代码
+
+        // 将透明度设置为 0，触发 CSS 的过渡效果，使其慢慢消失
+        popupBox.style.opacity = 0;
+
+        // 在过渡结束后隐藏元素，避免影响布局
+        setTimeout(() => {
+            if (popupBox.style.opacity === '0') {
+                popupBox.style.display = 'none';
+            }
+        }, 300); // 延迟时间应与 CSS transition 的 duration 相同 (0.3s = 300ms)
+    });
+
+
+    function loadUser() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'Get',
+                url: '/web/user/loadUser',
+                dataType: 'json',
+                success: function (data) {
+                    $("#userDropDown").text(data.name)
+                    if (data.UserPhoto !== null) {
+                        $(".head-photo").attr("src", "/headPhoto/" + data.UserPhoto.fileName)
+                    }
+                    $("#id").val(data.id)
+                    if (data.id == 1 && data.username == 'admin') {
+                        $(".systemManageLi").show()
+                    }
+                    $("#username").val(data.username);
+
+                    console.log(data.UserLevel)
+                    $("#level-img").attr("src","/images/"+data.UserLevel.rank+".jpg")
+                    resolve();
+                },
+                error: function (xhr, error) {
+                    if (xhr.status = '403') {
+                        window.location.href = "/";
+                    }
+                    console.log("我真是服了")
+                    console.log(error)
+                }
+            })
+        })
+    }
+
+    function logOut() {
+        $.ajax({
+            type: 'Get',
+            url: '/',
+            dataType: 'json',
+            success: function (data) {
+                if (data.status === 'success') {
+                    window.location.href = "loginPage.html";
+                } else {
+                    alert("Logout failed");
+                }
+            },
+            error: function (error) {
+                console.error("Logout error:", error);
+                alert("Something went wrong.");
+            }
+        })
+    }
+    function loadAllBoock() {
+        return new Promise((resolve, reject) => {
+            $("#main-context").empty();
+            $.ajax({
+                type: 'Get',
+                url: '/boock/getAllBoock',
+                dataType: 'json',
+                success: function (data) {
+                    $("#main-context").empty();
+                    for (let i = 0; i < data.length; i++) {
+                        let boock = data[i].boock;
+                        let userPhoto = data[i].userPhoto;
+                        let userLevel = data[i].userLevel;
+                        let userLevelImg = "/images/F.jpg";
+                        if (userLevel != null && userLevel.rank != null) {
+                            userLevelImg = "/images/" + userLevel.rank + ".jpg";
+                        }
+                        let photoMsg = '/images/龙.png';
+                        if (userPhoto != null && userPhoto.fileName != null) {
+                            photoMsg = "/headPhoto/" + userPhoto.fileName;
+                        }
+                        let time = boock.createTime;
+                        time = time.replaceAll("T", " ");
+                        let icontent = `<div id="${boock.id}" class="article">
+                                    <div class="arthur">
+                                        <ul class="ul-arthur">
+                                            <li class="li-head-photo"><img src="${photoMsg}" class="head-photo2"></li>
+                                            <li class="li-name"><span style="">${boock.name}</span></li>
+                                            <li class="li-level"><img src="${userLevelImg}" class="boock-level-img"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="content">
+                                        <div class="detail">
+                                            ${boock.content}
+                                        </div>
+                                        <div class="expand-panel">
+                                             <div class="expand-button-div" onclick="expand(this)" flag="0">展开</div>
+                                        </div>
+                                        <div class="comment-action-panel" style="margin-top: 10px">
+                                            <div class="comment-time">${time}</div>
+                                            <div class="comment-action" style="margin: 0px" onclick="reply(this)" replyTo="" replyToId="">回复</div>
+                                        </div>
+                                        <div class="comment">
+                                            <div class="comment-detail-panel">
+                                            </div>
+                                            <div class="comment-button-panel">
+                                                <input type="text" class="form-control me-2 comment-text">
+                                                <input type="button" class="btn btn-primary" value="我也说一句" onclick="commentClick(this)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+                        $("#main-context").append(icontent);
+                        const $currentArticle = $("#" + boock.id); // 获取刚刚添加的 article 元素
+                        const $contentDiv = $currentArticle.find(".content");
+                        const $detailDiv = $contentDiv.find(".detail");
+                        const $expandPanel = $contentDiv.find(".expand-panel");
+
+                        // 查找当前帖子内容中的所有图片
+                        const $imagesInContent = $detailDiv.find("img");
+                        const imageCount = $imagesInContent.length;
+                        let imagesLoadedCount = 0;
+
+                        if (imageCount === 0) {
+                            // 如果没有图片，直接处理
+                            dealBoock($currentArticle);
+                        } else {
+                            // 监听每张图片的加载完成事件
+                            $imagesInContent.on('load', function() {
+                                imagesLoadedCount++;
+                                if (imagesLoadedCount === imageCount) {
+                                    // 当所有图片加载完成后，处理当前帖子
+                                    dealBoock($currentArticle);
+                                }
+                            });
+
+                            // 处理图片加载失败的情况，避免一直等待
+                            $imagesInContent.on('error', function() {
+                                console.error("图片加载失败:", this.src);
+                                imagesLoadedCount++;
+                                if (imagesLoadedCount === imageCount) {
+                                    dealBoock($currentArticle);
+                                }
+                            });
+                        }
+
+                        if (boock.userId == $("#id").val() || $("#id").val() == '1') {
+                            let de = `<div class="comment-action" style="margin: 0px 0px 0px 10px;color: red" onclick="ifDel('${boock.id}')">删除</div>`;
+                            $contentDiv.find("div[class = 'comment-action-panel']").append(de);
+                        }
+                        var listComment = data[i].listCommentVo;
+                        for (let j = 0; j < listComment.length; j++) {
+                            let replyMsg = "：";
+                            if (listComment[j].comment.replyToId != null && listComment[j].comment.replyToId != "") {
+                                replyMsg = "回复" + listComment[j].comment.replyToName + "：";
+                            }
+                            let time = listComment[j].comment.createTime;
+                            time = time.replaceAll("T", " ");
+                            let listPhotoMsg = "/images/龙.png";
+                            if (listComment[j].userPhoto != null && listComment[j].userPhoto.fileName != null) {
+                                listPhotoMsg = "/headPhoto/" + listComment[j].userPhoto.fileName;
+                            }
+                            var icomment = `<div id="${listComment[j].comment.id}" class="comment-iDetail">
+                                        <img src="${listPhotoMsg}" class="head-photo3">
+                                        <span>${listComment[j].comment.name}${replyMsg}${listComment[j].comment.comment}</span>
+                                    </div>
+                                    <div class="comment-action-panel">
+                                        <div class="comment-time">${time}</div>
+                                        <div class="comment-action" onclick="reply(this)" replyToUserId="${listComment[j].comment.userId}" replyToName="${listComment[j].comment.name}" replyToId="${listComment[j].comment.id}">回复</div>
+                                    </div>`;
+                            $currentArticle.find("div[class = 'comment-detail-panel']").append(icomment);
+                        }
+                    }
+
+                    resolve(); // 所有帖子都已添加到 DOM，不需要延迟 Promise 的 resolve
+                },
+                error: function (error) {
+                    reject(error);
+                    alert("Something went wrong.");
+                }
+            });
+        });
+    }
+
+    function dealBoock($article) { // 修改 dealBoock 函数接收一个 article 元素作为参数
+        let $contentDetail = $article.find(".detail");
+        let $expandPanel = $article.find(".expand-panel");
+        const $expandButtonDiv = $article.find(".expand-button-div");
+        const $content = $article.find(".content"); // 获取 content 元素
+
+        if ($contentDetail[0].scrollHeight <= 300) {
+            $expandPanel.hide();
+        } else {
+            $expandPanel.show();
+        }
+    }
+
+    function expand(obj) {
+        let $detail = $(obj).parent().parent().find(".detail");
+        if ($detail.hasClass('expanded')) {
+            $detail.css('max-height', '300px'); // 收起时直接回到 300px
+            $(obj).text('展开');
+        } else {
+            $detail.css('max-height', $detail[0].scrollHeight + 'px'); // 展开时设置为实际高度
+            $(obj).text('收起');
+        }
+        $detail.toggleClass('expanded');
+    }
+
+    function reply(obj) {
+        if ($(obj).attr("replyToId") != null && $(obj).attr("replyToId") != "") {
+            $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").val("回复" + $(obj).attr("replyToName") + "：");
+        } else {
+            $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").val("");
+        }
+        $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").attr("replyToUserId", $(obj).attr("replyToUserId"));
+        $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").attr("replyToName", $(obj).attr("replyToName"));
+        $(obj).parent().parent().parent().find("div[class='comment-button-panel']").find("input[type='text']").attr("replyToId", $(obj).attr("replyToId"));
+
+    }
+
+    // 示例：调用公共弹窗方法来删除 Boock
+    function ifDel(id) {
+        showConfirmDialog("你确定删除吗？", id, deleteBoock);
+    }
+
+    function deleteBoock(boockId) {
+        return $.ajax({
+            url: "/boock/delete",
+            method: "DELETE",
+            data: { boockId: boockId },
+            success: function (response) {
+                console.log("删除成功", response);
+                loadAllBoock();
+            },
+            error: function (xhr, status, error) {
+                console.error("删除失败", error);
+                alert("删除失败，请稍后重试。");
+            }
+        });
+    }
+
+    function commentClick(obj) {
+        let replyToUserId = $(obj).siblings('.comment-text').attr("replyToUserId");
+        let replyToName = $(obj).siblings('.comment-text').attr("replyToName");
+        let replyToId = $(obj).siblings('.comment-text').attr("replyToId");
+        var commentText = $(obj).siblings('.comment-text').val();
+        if(commentText==null || commentText==""){
+            attentionAlert("评论不能为空！");
+            return;
+        }
+        let textIndex = commentText.indexOf("：");
+        if (textIndex !== -1) {
+            commentText = commentText.substring(textIndex + 1);
+        }
+
+        var contentId = $(obj).closest('.article').attr('id');
+        var param = {
+            userId: $("#id").val(),
+            name: $("#name").val(),
+            contentId: contentId,
+            comment: commentText,
+            createBy: $("#id").val(),
+            replyToUserId: replyToUserId,
+            replyToName: replyToName,
+            replyToId: replyToId
+        }
+        $.ajax({
+            url: "/boock/addComment",
+            method: "POST",
+            data: JSON.stringify(param),
+            contentType: "application/json",
+            success: function (data) {
+                // console.log('Success:', response); // 处理成功响应
+                dialogAlert("评论成功");
+                setTimeout(function (){
+                    expAlert(data.msg);
+                },2000)
+                loadAllBoock()
+                // loadAllBoock().then(() => {
+                //     dealBoock();
+                // }).catch((error => {
+                //     console.error(error)
+                // }))
+
+            },
+            error: function (error) {
+                console.error('Error:', error); // 处理错误响应
+                alert("评论失败")
+            }
+        })
+    }
+
+    function search() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'Get',
+                data: {
+                    search: $("#search").val()
+                },
+                url: '/boock/search',
+                dataType: 'json',
+                success: function (data) {
+                    $("#main-context").empty();
+                    let userpanelHtml = `<div class="search-title">搜索到的用户</div><div class="search-user-panel"></div>`
+                    $("#main-context").append(userpanelHtml);
+                    if (data.User == null || data.User == "") {
+                        $(".search-user-panel").append(`没有搜到相关用户`);
+                    }
+                    for (let i = 0; i < data.User.length; i++) {
+                        let user = data.User[i];
+                        let userPhotoPath = "/images/龙.png";
+                        if (user.userPhoto != null) {
+                            userPhotoPath = user.userPhoto.fileName;
+                        }
+                        var iuserhtml = `<div class="search-user">
+                                        <img class="head-photo4" src="/headPhoto/${userPhotoPath}">
+                                        <span>${user.name}</span>
+                                    </div>`
+                        $(".search-user-panel").append(iuserhtml)
+                    }
+                    $("#main-context").append(`<div class="search-title" style="margin-top:20px">搜索到的Boock</div>`);
+
+
+                    for (let i = 0; i < data.Boock.length; i++) {
+                        let boock = data.Boock[i].boock;
+                        let userPhoto = data.Boock[i].userPhoto;
+                        let photoMsg = '/images/龙.png';
+                        if (userPhoto != null && userPhoto.fileName != null) {
+                            photoMsg = "/headPhoto/" + userPhoto.fileName;
+                        }
+                        let time = boock.createTime;
+                        time = time.replaceAll("T", " ");
+                        let icontent = `<div id="${boock.id}" class="article">
+                                    <div class="arthur">
+                                        <ul class="ul-arthur">
+                                            <li class="li-head-photo"><img src="${photoMsg}" class="head-photo2"></li>
+                                            <li class="li-name"><span style="">${boock.name}</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="content">
+                                        <div class="detail">
+                                            ${boock.content}
+                                        </div>
+                                        <div class="expand-panel">
+                                             <div class="expand-button-div" onclick="expand(this)" flag="0">展开</div>
+                                        </div>
+                                        <div class="comment-action-panel" style="margin-top: 10px">
+                                            <div class="comment-time">${time}</div>
+                                            <div class="comment-action" style="margin: 0px" onclick="reply(this)" replyTo="" replyToId="">回复</div>
+                                        </div>
+                                        <div class="comment">
+                                            <div class="comment-detail-panel">
+                                            </div>
+                                            <div class="comment-button-panel">
+                                                <input type="text" class="form-control me-2 comment-text">
+                                                <input type="button" class="btn btn-primary" value="我也说一句" onclick="commentClick(this)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+                        $("#main-context").append(icontent);
+                        const $currentArticle = $("#" + boock.id); // 获取刚刚添加的 article 元素
+                        const $contentDiv = $currentArticle.find(".content");
+                        const $detailDiv = $contentDiv.find(".detail");
+                        const $expandPanel = $contentDiv.find(".expand-panel");
+
+                        // 查找当前帖子内容中的所有图片
+                        const $imagesInContent = $detailDiv.find("img");
+                        const imageCount = $imagesInContent.length;
+                        let imagesLoadedCount = 0;
+
+                        if (imageCount === 0) {
+                            // 如果没有图片，直接处理
+                            dealBoock($currentArticle);
+                        } else {
+                            // 监听每张图片的加载完成事件
+                            $imagesInContent.on('load', function() {
+                                imagesLoadedCount++;
+                                if (imagesLoadedCount === imageCount) {
+                                    // 当所有图片加载完成后，处理当前帖子
+                                    dealBoock($currentArticle);
+                                }
+                            });
+
+                            // 处理图片加载失败的情况，避免一直等待
+                            $imagesInContent.on('error', function() {
+                                console.error("图片加载失败:", this.src);
+                                imagesLoadedCount++;
+                                if (imagesLoadedCount === imageCount) {
+                                    dealBoock($currentArticle);
+                                }
+                            });
+                        }
+
+                        if (boock.userId == $("#id").val() || $("#id").val() == '1') {
+                            let de = `<div class="comment-action" style="margin: 0px 0px 0px 10px;color: red" onclick="ifDel()">删除</div>`;
+                            $contentDiv.find("div[class = 'comment-action-panel']").append(de);
+                        }
+                        var listComment = data.Boock[i].listCommentVo;
+                        for (let j = 0; j < listComment.length; j++) {
+                            let replyMsg = "：";
+                            if (listComment[j].comment.replyToId != null && listComment[j].comment.replyToId != "") {
+                                replyMsg = "回复" + listComment[j].comment.replyToName + "：";
+                            }
+                            let time = listComment[j].comment.createTime;
+                            time = time.replaceAll("T", " ");
+                            let listPhotoMsg = "/images/龙.png";
+                            if (listComment[j].userPhoto != null && listComment[j].userPhoto.fileName != null) {
+                                listPhotoMsg = "/headPhoto/" + listComment[j].userPhoto.fileName;
+                            }
+                            var icomment = `<div id="${listComment[j].comment.id}" class="comment-iDetail">
+                                        <img src="${listPhotoMsg}" class="head-photo3">
+                                        <span>${listComment[j].comment.name}${replyMsg}${listComment[j].comment.comment}</span>
+                                    </div>
+                                    <div class="comment-action-panel">
+                                        <div class="comment-time">${time}</div>
+                                        <div class="comment-action" onclick="reply(this)" replyToUserId="${listComment[j].comment.userId}" replyToName="${listComment[j].comment.name}" replyToId="${listComment[j].comment.id}">回复</div>
+                                    </div>`;
+                            $currentArticle.find("div[class = 'comment-detail-panel']").append(icomment);
+                        }
+                    }
+
+                    resolve(); // 所有帖子都已添加到 DOM，不需要延迟 Promise 的 resolve
+
+                },
+                error: function (error) {
+                    alert("Something went wrong.");
+                }
+            })
+        }).then(data => {
+            dealBoock(); // 立马跑dealBoock
+        }).catch(error => {
+            console.log("操，搜索挂了:", error); // 出错随便处理
+        });
+
+    }
+</script>
+</html>

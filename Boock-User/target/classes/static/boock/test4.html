@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .shape-container {
+            position: relative; /* 可选 */
+            width: 100px;
+            height: 100px;
+            background-color: #e3e3e3;
+            /* 其他样式 */
+        }
+
+        .shape-container::after {
+            content: "鸡你太美";
+        }
+    </style>
+</head>
+<body>
+<div class="shape-container"></div>
+</body>
+</html>
