@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%; margin: 0">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link href="/common/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/common/css/common-backstage.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+    <script src="/common/js/bootstrap.bundle.js"></script>
+    <script src="/common/js/jquery-3.5.1.js"></script>
+    <script src="/common/js/common.js"></script>
+    <script src="/common/js/particles.js"></script>
+    <link href="/common/css/particles-js-backstage.css" rel="stylesheet">
+</head>
+<body class="containBody">
+<div id="particles-js"></div>
+<div id="popup" class="popup"></div>
+<div id="dialog" class="dialog"></div>
+<div id="attention" class="attention"></div>
+<div id="overlay" class="overlay"></div>
+<div id="pop-confirm" class="pop-confirm">
+    <p style="text-align: center"></p>
+    <input type="button" class="btn btn-primary" value="确定">
+    <input type="button" style="margin-left: 20px" onclick="closePopConfirm()" class="btn btn-light" value="取消">
+</div>
+<div class="main-panel">
+    <div class="menu-panel">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" id="top-menu"
+             style="width:100%;background-color: #4d4d4d !important;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/index.html" style="color: #ffffff;font-weight: bold">Boock</a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+                    <ul class="navbar-nav me-0">
+                        <li class="nav-item">
+                            <img src="/images/龙.png" class="head-photo">
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a id="userDropDown" class="nav-link dropdown-toggle" href="#" role="button"
+                               style="color: #ffffff;font-weight: bold"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                我的
+                            </a>
+                            <input type="hidden" id="id" value="">
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="toPersonSetting()">个人中心</a></li>
+                                <li><a class="dropdown-item" href="/boock/write_page.html" onclick="">创作</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" onclick="logOut()">退出账号</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="left-menu">
+        <div class="left-menu-line"></div>
+        <div class="left-menu-1"><img src="images/用户.png"><span>用户管理</span></div>
+    </div>
+    <!-- 修改 main-page，移除 position: fixed，放入文档流 -->
+    <div class="main-page">
+        <!-- 添加 table-container，确保表格高度受限时支持内部滚动 -->
+
+            <table class="table user-list">
+                <colgroup style="width: 10%"></colgroup>
+                <colgroup style="width: 10%"></colgroup>
+                <colgroup style="width: 20%"></colgroup>
+                <colgroup style="width: 20%"></colgroup>
+                <colgroup style="width: 10%"></colgroup>
+                <colgroup style="width: 30%"></colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">昵称</th>
+                    <th scope="col">用户名</th>
+                    <th scope="col">头像</th>
+                    <th scope="col">操作</th>
+                </tr>
+                </thead>
+                <tbody id="user-tbody"></tbody>
+            </table>
+        <!-- 移除分页的 position: fixed，使其随内容滚动 -->
+        <nav aria-label="Page navigation example" style="display: flex; justify-content: right; margin-top: 20px;">
+            <ul class="pagination"></ul>
+        </nav>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+        particlesJS.load('particles-js', '/common/js/particles-backstage.json', function () {
+            console.log('callback - particles.js config loaded');
+        });
+        loadUser(function (data) {
+            $("#userDropDown").text(data.name)
+            if (data.UserPhoto !== null) {
+                $(".head-photo").attr("src", "/headPhoto/" + data.UserPhoto.fileName)
+            }
+            $("#id").val(data.id)
+            $("#username").val(data.username)
+        });
+        getUserList(1);
+    })
+
+    function loadUser(callback) {
+        $.ajax({
+            type: 'Get',
+            url: '/web/user/loadUser',
+            dataType: 'json',
+            success: function (data) {
+                callback(data);
+            },
+            error: function (xhr, error) {
+                if (xhr.status == '403') {
+                    window.location.href = "/";
+                }
+                console.log("我真是服了")
+                console.log(error)
+            }
+        })
+    }
+
+    function logOut() {
+        $.ajax({
+            type: 'Get',
+            url: '/',
+            dataType: 'json',
+            success: function (data) {
+                if (data.status === 'success') {
+                    window.location.href = "loginPage.html";
+                } else {
+                    alert("Logout failed");
+                }
+            },
+            error: function (error) {
+                console.error("Logout error:", error);
+                alert("Logout failed. Please try again later.");
+            }
+        })
+    }
+
+    function getUserList(pageNum) {
+        $("#user-tbody").empty();
+        $(".pagination").empty();
+        $.ajax({
+            type: 'GET',
+            url: '/backstage/user/getUserList',
+            data: {
+                pageNum: pageNum,
+                pageSize: 10
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data)
+                let userPage = data.content;
+                for (let i = 0; i < userPage.length; i++) {
+                    let id = userPage[i].id;
+                    let name = userPage[i].name;
+                    let username = userPage[i].username;
+                    let phone = userPage[i].phone;
+                    let shtml = `<tr>
+                        <th scope="row">${i+1}</th>
+                        <td>${id}</td>
+                        <td>${name}</td>
+                        <td>${username}</td>
+                        <td></td>
+                        <td><input type="button" class="btn btn-danger" value="删除" onclick="ifDel(${id})"></td>
+                    </tr>`;
+                    $("#user-tbody").append(shtml)
+                }
+                let fhtml = ``;
+                if (!data.first) {
+                    fhtml += `<li class="page-item"><a class="page-link" href="javascript:getUserList(${data.number})">Previous</a></li>`;
+                }
+                let totalPages = parseInt(data.totalPages);
+                for (let i = 0; i < totalPages; i++) {
+                    fhtml += `<li class="page-item"><a class="page-link" href="javascript:getUserList(${i+1})">${i+1}</a></li>`;
+                }
+                if (!data.last) {
+                    fhtml += `<li class="page-item"><a class="page-link" href="javascript:getUserList(${data.number+2})">Next</a></li>`;
+                }
+                $(".pagination").append(fhtml);
+            },
+            error: function (error) {
+                console.error("Load error:", error);
+                alert("Load failed. Please try again later.");
+            }
+        })
+    }
+
+    function ifDel(id){
+        showConfirmDialog("你确定删除吗？",id,deleteAccount);
+    }
+
+    function deleteAccount(id){
+        $.ajax({
+            type: 'DELETE',
+            url: '/backstage/user/deleteAccount',
+            data: {
+                id : id
+            },
+            // dataType : 'json',
+            success: function (data){
+                getUserList(1)
+            },
+            error: function (error) {
+                console.error("Load error:", error);
+                alert("Delete failed. Please try again later.");
+            }
+        })
+    }
+</script>
+</html>

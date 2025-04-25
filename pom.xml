@@ -7,6 +7,13 @@
     <groupId>com.boock</groupId>
     <artifactId>Boock</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>Boock-User</module>
+        <module>Boock-Backstage</module>
+        <module>Boock-Entity</module>
+        <module>Boock-Common-Static</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -109,6 +116,12 @@
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
             <version>1.0.0-M1</version> <!-- 检查最新版本 -->
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.binarywang/weixin-java-mp -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-mp</artifactId>
+            <version>3.9.0</version>
         </dependency>
     </dependencies>
     <repositories>

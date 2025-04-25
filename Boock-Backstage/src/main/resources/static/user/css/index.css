@@ -1,0 +1,113 @@
+.left-menu{
+    width: 250px;
+    height: 100%;
+    background-color: #545C64;
+    position: fixed;
+    top: 70px;
+    left: 0px;
+}
+
+.left-menu-line{
+    position: absolute;
+    height: 100%;
+    width: 15px;
+    background-color: #9c9c9c;
+    right: 0px;
+}
+
+
+.left-menu-line::after {
+    content: '';
+    position: absolute; /* 相对于 .left-menu-line 定位 */
+    top: 50%; /* 垂直居中 */
+    right: 2px; /* 调整三角形距离右侧的距离 */
+    transform: translateY(-50%); /* 配合 top: 50% 实现精确垂直居中 */
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent; /* 上边框透明 */
+    border-bottom: 8px solid transparent; /* 下边框透明 */
+    border-right: 10px solid white; /* 左边框白色，形成三角形 */
+    cursor: pointer;
+}
+
+.left-menu-1{
+    width: calc(100% - 15px);
+    height: 70px;
+    transition: background-color 0.5s ease-in-out;
+    color: #FFD04B;
+    font-size: 17px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    cursor: pointer;
+}
+
+.left-menu-1:hover{
+    background-color: #434A50;
+}
+
+
+.left-menu-1 span{
+    margin-left: 10px;
+}
+
+.main-page{
+    width: calc(100% - 290px);
+    /*height: calc(100% - 110px);*/
+    /*position: fixed;*/
+    /*right: 20px;*/
+    /*top: 90px;*/
+    /*padding: 20px;*/
+    margin-left: 270px; /* 为左侧菜单和间距预留空间 */
+    margin-top: 90px; /* 为顶部导航预留空间 */
+    padding: 20px;
+    min-height: calc(100vh - 110px); /* 确保至少占满视口高度 */
+}
+
+
+/* 表格样式 */
+.user-list {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.user-list th,
+.user-list td {
+    padding: 15px 12px; /* 增加内边距 */
+    vertical-align: middle; /* 垂直居中 */
+    border: 1px solid #dee2e6; /* 更明显的单元格边框 */
+    text-align: center; /* 默认左对齐文本 */
+}
+
+.user-list thead th {
+    background-color: #f8f9fa; /* 浅灰色表头背景 */
+    color: #495057; /* 表头文字颜色 */
+    font-weight: bold; /* 加粗表头文字 */
+    font-size: 19px;
+}
+
+.user-list tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* 偶数行浅灰色背景 */
+}
+
+.user-list tbody tr:hover {
+    background-color: #e0f7fa; /* 鼠标悬停时的浅蓝色背景 */
+    cursor: pointer; /* 鼠标悬停时显示手型 */
+}
+
+/* 可选：更细致的头部样式 */
+.user-list thead {
+    border-bottom: 2px solid #ced4da;
+}
+
+/* 可选：更细致的底部样式 */
+.user-list tfoot {
+    background-color: #f8f9fa;
+    border-top: 2px solid #ced4da;
+}

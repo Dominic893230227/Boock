@@ -7,7 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Boock" />
+        <module name="Boock-Entity" />
+        <module name="Boock-User" />
+        <module name="Boock-Common-Static" />
+        <module name="Boock-Backstage" />
       </profile>
     </annotationProcessing>
   </component>

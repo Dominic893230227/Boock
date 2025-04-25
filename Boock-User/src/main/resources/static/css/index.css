@@ -1,0 +1,237 @@
+
+/*.main-panel img{*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    object-fit: contain;*/
+/*    display: block;*/
+/*}*/
+
+
+#top-menu {
+    width: 100%;
+}
+
+.systemManageLi{
+    display: none;
+}
+
+.main-context {
+    display: flex;
+    width: 76%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 140px;
+    padding-bottom: 120px;
+}
+
+.head-photo2 {
+    width: 80px; /* 设置头像的宽度 */
+    height: 80px; /* 设置头像的高度 */
+    border-radius: 50%; /* 设置圆角为50%，实现圆形效果 */
+    object-fit: cover; /* 确保图片内容在保持纵横比的同时填充元素的整个内容框 */
+    border: 2px solid #ccc; /* 可选：添加边框 */
+}
+
+.head-photo3 {
+    width: 30px; /* 设置头像的宽度 */
+    height: 30px; /* 设置头像的高度 */
+    border-radius: 50%; /* 设置圆角为50%，实现圆形效果 */
+    object-fit: cover; /* 确保图片内容在保持纵横比的同时填充元素的整个内容框 */
+    border: 2px solid #ccc; /* 可选：添加边框 */
+}
+
+.article {
+    width: 80%;
+    margin-top: 20px;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    /*border: 1px solid black;*/
+    box-shadow: 5px 5px 10px #888888;
+    display: flex;
+    /*align-items: center;*/
+}
+
+.arthur {
+    height: 150px;
+    /*border-bottom: 1px solid #495057;*/
+    /*background-color: #e3e3e3;*/
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+.ul-arthur {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ul-arthur li {
+    list-style: none;
+}
+
+.li-head-photo {
+
+}
+
+.li-name {
+
+}
+
+.boock-level-img{
+    width: 30px;
+    height: 30px;
+}
+
+.content {
+    width: 100%;
+    padding: 10px;
+}
+
+.content .fade-mask {
+    position: absolute;
+    bottom: 30px; /* 遮罩层底部距离内容底部30px */
+    left: 0;
+    width: 100%;
+    height: 30px; /* 遮罩层高度 */
+    background: linear-gradient(to bottom, transparent, white); /* 渐变遮罩 */
+    pointer-events: none; /* 遮罩层不响应鼠标事件 */
+}
+
+.detail {
+    min-height: 300px;
+    position: relative;
+    overflow: hidden;
+    transition: max-height 1s ease-in-out;
+    max-height: 300px;
+}
+
+.detail.expanded {
+    max-height: 100000px; /* 展开时取消最大高度限制 */
+}
+
+.detail p {
+    margin: 0;
+}
+
+.detail img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.comment {
+    width: 100%;
+    /*padding: 10px 0px;*/
+    background-color: #e3e3e3;
+    border-radius: 10px;
+}
+
+.comment-detail-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-iDetail {
+    display: flex;
+    align-items: center;
+    padding: 0px 8px;
+    position: relative;
+}
+
+.expand-panel{
+    display: flex;
+    justify-content: center;
+}
+
+.expand-button-div{
+    width: 100%; /* 宽度为100% */
+    height: 30px; /* 设置高度 */
+    line-height: 30px; /* 垂直居中 */
+    text-align: center; /* 水平居中 */
+    cursor: pointer;
+    background: linear-gradient(to bottom, #f0f0f0, #ffffff); /* 渐变背景 */
+    border-bottom: 1px solid #ccc; /* 添加下边框 */
+}
+
+.comment-action-panel {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.comment-time {
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #888888;
+    font-size: 13px;
+}
+
+.comment-action {
+    margin-right: 10px;
+    height: auto; /* 设置高度 */
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    cursor: pointer;
+    color: #888888;
+    font-size: 13px;
+    /* 其他样式，例如圆角、边框等 */
+
+}
+
+.comment-button-panel {
+    height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.comment-text {
+    width: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.comment-button-panel input {
+    /*height: 30px;*/
+    font-size: 13px;
+    padding: 4px;
+    height: 30px;
+    margin-right: 8px;
+}
+
+.search-title {
+    width: 100%;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.search-user-panel {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    overflow-x: auto;
+}
+
+.search-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.head-photo4 {
+    width: 80px; /* 设置头像的宽度 */
+    height: 80px; /* 设置头像的高度 */
+    border-radius: 50%; /* 设置圆角为50%，实现圆形效果 */
+    object-fit: cover; /* 确保图片内容在保持纵横比的同时填充元素的整个内容框 */
+    border: 2px solid #ccc; /* 可选：添加边框 */
+}
+
