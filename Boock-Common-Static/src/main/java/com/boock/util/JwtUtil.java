@@ -12,7 +12,7 @@ import java.util.UUID;
 public class JwtUtil {
 
 
-    public static long time = 1000*60*60*5;
+    public static long time = 1000*60*60*24;
     public static String APP_SECRET = "ymzldnrwrcccydzzgjwcwycicoywynswdswdwsndszdyykyyjhbzzjydkjdkbrhxybnzwjybbbblzdnldhxqdrsnyy";
 
     public static String creatJwtToken(Integer id,String username,String name){

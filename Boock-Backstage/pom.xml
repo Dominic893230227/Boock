@@ -18,10 +18,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.boock</groupId> <artifactId>Boock-Common-Static</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -31,6 +27,10 @@
         <dependency>
             <groupId>com.boock</groupId>
             <artifactId>Boock-Entity</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.boock</groupId> <artifactId>Boock-Common-Static</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

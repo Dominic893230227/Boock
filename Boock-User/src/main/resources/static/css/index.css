@@ -122,6 +122,16 @@
     max-height: 100%;
 }
 
+.boock-file{
+    width: 100%;
+}
+
+.boock-file img{
+    width: 150px;
+    height: 150px;
+    margin: 2px;
+}
+
 .comment {
     width: 100%;
     /*padding: 10px 0px;*/

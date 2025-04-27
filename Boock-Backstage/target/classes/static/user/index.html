@@ -20,8 +20,42 @@
 <div id="overlay" class="overlay"></div>
 <div id="pop-confirm" class="pop-confirm">
     <p style="text-align: center"></p>
-    <input type="button" class="btn btn-primary" value="确定">
+    <input type="button" class="btn btn-danger" value="确定">
     <input type="button" style="margin-left: 20px" onclick="closePopConfirm()" class="btn btn-light" value="取消">
+</div>
+<div class="add-panel">
+    <div class="top-bar">
+        <div class="close-button" onclick="closeAddPanel()"></div>
+    </div>
+    <div class="input-group input-group-sm mb-3 addDiv">
+        <div class="input-group-prepend">
+            <span class="input-group-text">账号</span>
+        </div>
+        <input id="add-username" type="text" class="form-control" aria-label="Sizing example input"
+               aria-describedby="inputGroup-sizing-sm" value="" required>
+    </div>
+    <div class="input-group input-group-sm mb-3 addDiv">
+        <div class="input-group-prepend">
+            <span class="input-group-text">昵称</span>
+        </div>
+        <input id="add-name" type="text" class="form-control" aria-label="Sizing example input"
+               aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="input-group input-group-sm mb-3 addDiv">
+        <div class="input-group-prepend">
+            <span class="input-group-text">密码</span>
+        </div>
+        <input id="add-password" type="password" class="form-control" aria-label="Sizing example input"
+               aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="input-group input-group-sm mb-3 addDiv">
+        <div class="input-group-prepend">
+            <span class="input-group-text">手机号</span>
+        </div>
+        <input id="add-phone" type="text" class="form-control" aria-label="Sizing example input"
+               aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <button class="btn btn-primary" onclick="addUser()">提交</button>
 </div>
 <div class="main-panel">
     <div class="menu-panel">
@@ -45,7 +79,9 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#" onclick="toPersonSetting()">个人中心</a></li>
                                 <li><a class="dropdown-item" href="/boock/write_page.html" onclick="">创作</a></li>
-                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
                                 <li><a class="dropdown-item" onclick="logOut()">退出账号</a></li>
                             </ul>
                         </li>
@@ -61,26 +97,31 @@
     <!-- 修改 main-page，移除 position: fixed，放入文档流 -->
     <div class="main-page">
         <!-- 添加 table-container，确保表格高度受限时支持内部滚动 -->
-
-            <table class="table user-list">
-                <colgroup style="width: 10%"></colgroup>
-                <colgroup style="width: 10%"></colgroup>
-                <colgroup style="width: 20%"></colgroup>
-                <colgroup style="width: 20%"></colgroup>
-                <colgroup style="width: 10%"></colgroup>
-                <colgroup style="width: 30%"></colgroup>
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">昵称</th>
-                    <th scope="col">用户名</th>
-                    <th scope="col">头像</th>
-                    <th scope="col">操作</th>
-                </tr>
-                </thead>
-                <tbody id="user-tbody"></tbody>
-            </table>
+        <div class="operate-panel">
+            <input id="search" class="form-control me-2" style="width: 30%" type="search" placeholder="搜索"
+                   aria-label="Search">
+            <button class="btn btn-light" onclick="searchUser()">搜索</button>
+            <button class="btn btn-primary" style="margin-left: 10px" onclick="showAddPanel()">新增</button>
+        </div>
+        <table class="user-list">
+            <colgroup style="width: 10%"></colgroup>
+            <colgroup style="width: 10%"></colgroup>
+            <colgroup style="width: 20%"></colgroup>
+            <colgroup style="width: 20%"></colgroup>
+            <colgroup style="width: 10%"></colgroup>
+            <colgroup style="width: 30%"></colgroup>
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">昵称</th>
+                <th scope="col">用户名</th>
+                <th scope="col">头像</th>
+                <th scope="col">操作</th>
+            </tr>
+            </thead>
+            <tbody id="user-tbody"></tbody>
+        </table>
         <!-- 移除分页的 position: fixed，使其随内容滚动 -->
         <nav aria-label="Page navigation example" style="display: flex; justify-content: right; margin-top: 20px;">
             <ul class="pagination"></ul>
@@ -161,7 +202,7 @@
                     let username = userPage[i].username;
                     let phone = userPage[i].phone;
                     let shtml = `<tr>
-                        <th scope="row">${i+1}</th>
+                        <th scope="row">${i + 1}</th>
                         <td>${id}</td>
                         <td>${name}</td>
                         <td>${username}</td>
@@ -176,10 +217,10 @@
                 }
                 let totalPages = parseInt(data.totalPages);
                 for (let i = 0; i < totalPages; i++) {
-                    fhtml += `<li class="page-item"><a class="page-link" href="javascript:getUserList(${i+1})">${i+1}</a></li>`;
+                    fhtml += `<li class="page-item"><a class="page-link" href="javascript:getUserList(${i + 1})">${i + 1}</a></li>`;
                 }
                 if (!data.last) {
-                    fhtml += `<li class="page-item"><a class="page-link" href="javascript:getUserList(${data.number+2})">Next</a></li>`;
+                    fhtml += `<li class="page-item"><a class="page-link" href="javascript:getUserList(${data.number + 2})">Next</a></li>`;
                 }
                 $(".pagination").append(fhtml);
             },
@@ -190,24 +231,113 @@
         })
     }
 
-    function ifDel(id){
-        showConfirmDialog("你确定删除吗？",id,deleteAccount);
+    function showAddPanel() {
+        $(".add-panel").addClass("active")
+        $(".overlay").addClass("active")
+        $(document).off('keydown.closeAddPanel').on('keydown.closeAddPanel', function (event) {
+            if (event.key === "Escape") {
+                closeAddPanel();
+            }
+        })
     }
 
-    function deleteAccount(id){
+    function closeAddPanel() {
+        $(".add-panel").removeClass("active");
+        $(".overlay").removeClass("active");
+    }
+
+    function addUser() {
+        let usernameInput = $("#add-username");
+        let nameInput = $("#add-name");
+        let passwordInput = $("#add-password");
+        let phoneInput = $("#add-phone");
+
+        let username = usernameInput.val().trim();
+        let name = nameInput.val().trim();
+        let password = passwordInput.val().trim();
+        let phone = phoneInput.val().trim();
+
+        if (username === "") {
+            attentionAlert("账号不能为空！");
+            usernameInput.focus();
+            return false;
+        }
+
+        if (name === "") {
+            attentionAlert("姓名不能为空！");
+            nameInput.focus();
+            return false;
+        }
+
+        if (password === "") {
+            attentionAlert("密码不能为空！");
+            passwordInput.focus();
+            return false;
+        }
+
+        if (phone === "") {
+            attentionAlert("手机号不能为空！");
+            phoneInput.focus();
+            return false;
+        }
+
+        let user = {
+            username: username,
+            name: name,
+            password: password,
+            phone: phone
+        };
+
+        $.ajax({
+            type: 'Post',
+            url: "/backstage/user/addUser",
+            data: JSON.stringify(user),
+            contentType: "application/json",
+            success: function () {
+                closeAddPanel();
+                dialogAlert("新增用户成功");
+                getUserList(1);
+            }
+        });
+    }
+
+    function ifDel(id) {
+        showConfirmDialog("你确定删除吗？", id, deleteAccount);
+    }
+
+    function deleteAccount(id) {
         $.ajax({
             type: 'DELETE',
             url: '/backstage/user/deleteAccount',
             data: {
-                id : id
+                id: id
             },
             // dataType : 'json',
-            success: function (data){
+            success: function (data) {
                 getUserList(1)
             },
             error: function (error) {
                 console.error("Load error:", error);
                 alert("Delete failed. Please try again later.");
+            }
+        })
+    }
+
+    function searchUser(){
+        let searchVal = $("#search").val();
+        $.ajax({
+            type: 'GET',
+            url: '/backstage/user/searchUser',
+            data: {
+                name: searchVal
+            },
+            dataType : 'json',
+            success: function (data) {
+                getUserList(1)
+            },
+            error: function (error) {
+                console.error("Load error:", error);
+                alert("Search failed. Please try again later.");
             }
         })
     }

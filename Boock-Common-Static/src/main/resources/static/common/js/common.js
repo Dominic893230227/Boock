@@ -46,13 +46,13 @@ function showConfirmDialog(message, id, onConfirm) {
     // 设置提示消息
     $("#pop-confirm").find("p").text(message);
     // 设置删除 ID
-    $("#pop-confirm").find("input[class='btn btn-primary']").attr("deleteId", id);
+    $("#pop-confirm").find("input[class='btn btn-danger']").attr("deleteId", id);
     // 显示弹窗和遮罩层
     $("#pop-confirm").addClass('active');
     $('#overlay').addClass('active');
 
     // 绑定“确定”按钮的点击事件，执行回调函数
-    $("#pop-confirm").find("input[class='btn btn-primary']").off('click').on('click', function () {
+    $("#pop-confirm").find("input[class='btn btn-danger']").off('click').on('click', function () {
         onConfirm(id); // 调用传入的回调函数，传递 id
         closePopConfirm(); // 点击“确定”后关闭弹窗
     });
@@ -71,9 +71,9 @@ function closePopConfirm() {
     $('#overlay').removeClass('active');
     // 移除按下 ESC 键时关闭弹窗的事件监听器
     $(document).off('keydown.closeConfirm');
-    $("#pop-confirm").find("input[class='btn btn-primary']").removeAttr("deleteId");
+    $("#pop-confirm").find("input[class='btn btn-danger']").removeAttr("deleteId");
     // 移除“确定”按钮的点击事件，避免重复绑定
-    $("#pop-confirm").find("input[class='btn btn-primary']").off('click');
+    $("#pop-confirm").find("input[class='btn btn-danger']").off('click');
 }
 
 

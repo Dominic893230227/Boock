@@ -2,10 +2,12 @@ package com.boock.service.impl;
 
 import com.boock.dao.BoockMapper;
 import com.boock.dao.UserMapper;
+import com.boock.entity.jpa.BoockFileRepository;
 import com.boock.entity.po.*;
 import com.boock.entity.vo.BoockVo;
 import com.boock.entity.vo.CommentVo;
 import com.boock.entity.jpa.UserLevelRepository;
+import com.boock.entity.vo.UserVo;
 import com.boock.service.BoockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,8 @@ public class BoockServiceImpl implements BoockService {
     private UserMapper userMapper;
     @Autowired
     private UserLevelRepository userLevelRepository;
-
+    @Autowired
+    private BoockFileRepository boockFileRepository;
     @Override
     public Integer saveBoock(Boock boock) {
         boock.setId(UUID.randomUUID().toString().replace("-", ""));
@@ -55,6 +58,9 @@ public class BoockServiceImpl implements BoockService {
 
             UserLevel userLevel = userLevelRepository.findByUserId(boock.getUserId());
             boockVo.setUserLevel(userLevel);
+
+            List<BoockFile> boockFileList = boockFileRepository.findByContentIdOrderByOrderNum(boock.getId());
+            boockVo.setBoockFile(boockFileList);
 
             boockVos.add(boockVo);
         }
@@ -122,15 +128,28 @@ public class BoockServiceImpl implements BoockService {
             }
             boockVo.setListCommentVo(listCommentVos);
 
+            UserLevel userLevel = userLevelRepository.findByUserId(boock.getUserId());
+            boockVo.setUserLevel(userLevel);
+
+            List<BoockFile> boockFileList = boockFileRepository.findByContentIdOrderByOrderNum(boock.getId());
+            boockVo.setBoockFile(boockFileList);
+
             boockVos.add(boockVo);
         }
         result.put("Boock",boockVos);
 
+
+        //查询用户
+        List<UserVo> userVos = new ArrayList<>();
         List<User> userList = userMapper.search(param);
         for (User user : userList) {
+            UserVo userVo = new UserVo();
             UserPhoto userPhoto = userMapper.findPhoto(user.getId());
+            userVo.setUser(user);
+            userVo.setUserPhoto(userPhoto);
+            userVos.add(userVo);
         }
-        result.put("User",userList);
+        result.put("User",userVos);
         return result;
     }
 

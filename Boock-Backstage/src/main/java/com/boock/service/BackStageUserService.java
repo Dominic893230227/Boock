@@ -1,12 +1,15 @@
 package com.boock.service;
 
 import com.boock.entity.po.User;
+import com.boock.entity.vo.UserVo;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface BackStageUserService {
-    Page<User> getUserList(Integer pageNum,Integer pageSize);
+    Page<UserVo> getUserList(Integer pageNum, Integer pageSize);
 
     void deleteAccount(Integer id);
+
+    void addAccount(User user);
 }
