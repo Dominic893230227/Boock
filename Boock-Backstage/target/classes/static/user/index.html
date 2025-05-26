@@ -92,7 +92,7 @@
     </div>
     <div class="left-menu">
         <div class="left-menu-line"></div>
-        <div class="left-menu-1"><img src="images/用户.png"><span>用户管理</span></div>
+        <div class="left-menu-1" onclick="toUserPage()"><img src="images/用户.png"><span>用户管理</span></div>
     </div>
     <!-- 修改 main-page，移除 position: fixed，放入文档流 -->
     <div class="main-page">
@@ -100,7 +100,7 @@
         <div class="operate-panel">
             <input id="search" class="form-control me-2" style="width: 30%" type="search" placeholder="搜索"
                    aria-label="Search">
-            <button class="btn btn-light" onclick="searchUser()">搜索</button>
+            <button class="btn btn-light" onclick="getUserList(1)">搜索</button>
             <button class="btn btn-primary" style="margin-left: 10px" onclick="showAddPanel()">新增</button>
         </div>
         <table class="user-list">
@@ -182,7 +182,13 @@
         })
     }
 
+    function toUserPage(){
+        $("#search").val('');
+        getUserList(1);
+    }
+
     function getUserList(pageNum) {
+        let searchName = $("#search").val();
         $("#user-tbody").empty();
         $(".pagination").empty();
         $.ajax({
@@ -190,23 +196,28 @@
             url: '/backstage/user/getUserList',
             data: {
                 pageNum: pageNum,
-                pageSize: 10
+                pageSize: 10,
+                searchName:searchName
             },
             dataType: 'json',
             success: function (data) {
                 console.log(data)
                 let userPage = data.content;
                 for (let i = 0; i < userPage.length; i++) {
-                    let id = userPage[i].id;
-                    let name = userPage[i].name;
-                    let username = userPage[i].username;
-                    let phone = userPage[i].phone;
+                    let id = userPage[i].user.id;
+                    let name = userPage[i].user.name;
+                    let username = userPage[i].user.username;
+                    let phone = userPage[i].user.phone;
+                    let userPhoto = "/龙.png";
+                    if(userPage[i].userPhoto!=null && userPage[i].userPhoto.fileName!= null){
+                        userPhoto = userPage[i].userPhoto.fileName;
+                    }
                     let shtml = `<tr>
                         <th scope="row">${i + 1}</th>
                         <td>${id}</td>
                         <td>${name}</td>
                         <td>${username}</td>
-                        <td></td>
+                        <td><img src="/headPhoto/${userPhoto}"></td>
                         <td><input type="button" class="btn btn-danger" value="删除" onclick="ifDel(${id})"></td>
                     </tr>`;
                     $("#user-tbody").append(shtml)
@@ -319,25 +330,6 @@
             error: function (error) {
                 console.error("Load error:", error);
                 alert("Delete failed. Please try again later.");
-            }
-        })
-    }
-
-    function searchUser(){
-        let searchVal = $("#search").val();
-        $.ajax({
-            type: 'GET',
-            url: '/backstage/user/searchUser',
-            data: {
-                name: searchVal
-            },
-            dataType : 'json',
-            success: function (data) {
-                getUserList(1)
-            },
-            error: function (error) {
-                console.error("Load error:", error);
-                alert("Search failed. Please try again later.");
             }
         })
     }

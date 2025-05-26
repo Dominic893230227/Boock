@@ -21,8 +21,7 @@ public class MyWechatService {
         try {
             WxMpUserService userService = wxMpService.getUserService();
             WxMpUser fuck = userService.userInfo("o5AB46LHA_BOo1DmzdVCU2LYpvY");
-//            return wxMpService.getAccessToken();
-
+//            return wxMpService.getAccessToken();、
             map.put("WxMpUser",fuck);
             return map;
         } catch (WxErrorException e) {

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface BackStageUserService {
-    Page<UserVo> getUserList(Integer pageNum, Integer pageSize);
+    Page<UserVo> getUserList(Integer pageNum, Integer pageSize , String searchName);
 
     void deleteAccount(Integer id);
 

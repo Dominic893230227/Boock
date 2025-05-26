@@ -130,6 +130,13 @@
     border-top: 2px solid #ced4da;
 }
 
+.user-list img{
+    width: 40px; /* 设置头像的宽度 */
+    height: 40px; /* 设置头像的高度 */
+    border-radius: 50%; /* 设置圆角为50%，实现圆形效果 */
+    object-fit: cover; /* 确保图片内容在保持纵横比的同时填充元素的整个内容框 */
+    border: 2px solid #000000; /* 可选：添加边框 */
+}
 
 .add-panel {
     position: fixed;

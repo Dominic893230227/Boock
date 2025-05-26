@@ -28,11 +28,9 @@ public class BackStageUserServiceImpl implements BackStageUserService {
     private UserRepository userRepository;
 
     @Override
-    public Page<UserVo> getUserList(Integer pageNum, Integer pageSize) {
-//        List<User> userList = backStageUserMapper.getAllUser();
+    public Page<UserVo> getUserList(Integer pageNum, Integer pageSize, String searchName) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-//        Page<User> userPage = userRepository.findAll(pageable);
-        Page<User> userPage = userRepository.findByIdNot(1, pageable);
+        Page<User> userPage = userRepository.findByIdNotAndLike(1,searchName, pageable);
         List<User> content = userPage.getContent();
         List<UserVo> userVos = new ArrayList<>();
         for (User user : content) {
@@ -42,7 +40,7 @@ public class BackStageUserServiceImpl implements BackStageUserService {
             userVo.setUserPhoto(photo);
             userVos.add(userVo);
         }
-        PageImpl<UserVo> userVoPage = new PageImpl<UserVo>(userVos,userPage.getPageable(),userPage.getTotalElements());
+        PageImpl<UserVo> userVoPage = new PageImpl<UserVo>(userVos, userPage.getPageable(), userPage.getTotalElements());
         return userVoPage;
     }
 

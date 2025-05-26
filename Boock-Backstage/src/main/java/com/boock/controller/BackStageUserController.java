@@ -16,9 +16,9 @@ public class BackStageUserController {
     @Autowired
     private BackStageUserService backStageUserService;
     @GetMapping("/getUserList")
-    public Page<UserVo> getAllUser(@RequestParam("pageNum")Integer pageNum,@RequestParam("pageSize") Integer pageSize){
+    public Page<UserVo> getAllUser(@RequestParam("pageNum")Integer pageNum,@RequestParam("pageSize") Integer pageSize,@RequestParam(value = "searchName",required = false) String searchName){
 //        System.out.println("damn");
-        Page<UserVo> userPage = backStageUserService.getUserList(pageNum,pageSize);
+        Page<UserVo> userPage = backStageUserService.getUserList(pageNum,pageSize,searchName);
         return userPage;
     }
 
@@ -32,8 +32,4 @@ public class BackStageUserController {
         backStageUserService.addAccount(user);
     }
 
-    @GetMapping("/searchUser")
-    public void deleteAccount(@RequestParam(name = "name") String name){
-//        backStageUserService.searchUser(name);
-    }
 }
